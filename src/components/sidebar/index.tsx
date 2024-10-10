@@ -4,10 +4,15 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { Home, Package, Package2, PanelBottom, Settings2, ShoppingBag, Users2 } from "lucide-react"
+import { Home, Package2, PanelBottom, Settings2, ShoppingBag, Users2 } from "lucide-react"
 import Link from "next/link"
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "../ui/tooltip"
 import DarkLightToggle from "../switch/theme"
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+  } from "@/components/ui/avatar"
 
 export function Sidebar() {
     return (
@@ -17,7 +22,10 @@ export function Sidebar() {
                     <TooltipProvider>
                         <Link href='#'
                             className="flex h-9 w-9 shrink-0 items-center justify-center bg-primary text-primary-foreground rounded-full">
-                            <Package className="h-4 w-4"/>
+                            <Avatar>
+                                <AvatarImage src="https://avatars.githubusercontent.com/u/54381772?v=4" alt="@shadcn" />
+                                <AvatarFallback>CN</AvatarFallback>
+                            </Avatar>
                             <span className="sr-only">Dashboard</span>
                         </Link>
 
@@ -125,8 +133,10 @@ export function Sidebar() {
                                             justify-center text-primary-foreground md:text-base gap-2"
                                     prefetch={false}
                                 >
-                                    <Package className="h-5 w-5 transition-all"/>
-                                    <span className="sr-only">Logo</span>
+                                    <Avatar>
+                                        <AvatarImage src="https://avatars.githubusercontent.com/u/54381772?v=4" alt="@shadcn" />
+                                        <AvatarFallback>CN</AvatarFallback>
+                                    </Avatar>
                                 </Link>
 
                                 <Link 
