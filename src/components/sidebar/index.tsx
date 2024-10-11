@@ -31,7 +31,7 @@ export function Sidebar() {
 
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <Link href='#'
+                                <Link href='/'
                                     className="flex h-9 w-9 shrink-0 items-center justify-center 
                                     rounded-lg text-muted-foreground transition-colors hover:text-foreground"
                                 >
@@ -57,7 +57,7 @@ export function Sidebar() {
 
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <Link href='#'
+                                <Link href='/kanban'
                                     className="flex h-9 w-9 shrink-0 items-center justify-center 
                                     rounded-lg text-muted-foreground transition-colors hover:text-foreground"
                                 >
@@ -65,7 +65,7 @@ export function Sidebar() {
                                     <span className="sr-only">Produtos</span>
                                 </Link>
                             </TooltipTrigger>
-                            <TooltipContent side='right'>Produtos</TooltipContent>
+                            <TooltipContent side='right'>Kanban</TooltipContent>
                         </Tooltip>
 
                         <Tooltip>
