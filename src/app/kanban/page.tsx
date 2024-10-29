@@ -4,9 +4,11 @@ import { KanbanDialog } from "@/components/dialog/kanbanDialog";
 import { db } from "@/db/firebase"; // Importar o db do seu Firebase
 import { collection, getDocs } from "firebase/firestore";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [kanbanTables, setKanbanTables] = useState([]); // Estado para armazenar as tabelas
+  const router = useRouter(); // Inicialize o router
 
   // Função para buscar os dados do Firestore
   const fetchKanbanTables = async () => {
@@ -22,6 +24,10 @@ export default function Home() {
     fetchKanbanTables(); // Chama a função ao montar o componente
   }, []);
 
+  const handlePage = (tableName) => {
+    router.push(`/tabela/${tableName}`);
+  };
+
   return (
     <main className="sm:ml-14 p-4">
       <div className="flex">
@@ -33,7 +39,7 @@ export default function Home() {
         <Card 
             key={table.id} 
             className="w-[200px] p-4 border rounded-md cursor-pointer hover:bg-gray-200 transition-all hover:text-black" 
-            onClick={() => console.log(`Clicou na tabela: ${table.name}`)}
+            onClick={() => handlePage(table.name)}
         > 
             <CardTitle className="transition-all">{table.name}</CardTitle>
             <CardDescription className="mt-3">{table.imageUrl}</CardDescription> {/* Exibir a descrição ou a URL da imagem */}
