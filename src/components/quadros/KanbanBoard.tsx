@@ -1,26 +1,18 @@
 'use client'
 
 import React, { useState } from "react";
-import { Button } from "../ui/button";
-import { PlusCircleIcon } from "lucide-react";
 import { Column, Id } from "@/interfaces/Column";
 import ColumnContainer from "./ColumnContainer";
+import { Task } from "@/interfaces/Tasks";
 
 function KanbanBoard() {
-    const [columns, setColumns] = useState<Column[]>([]);
+    const [columns, setColumns] = useState<Column[]>([{'id': '1', 'title':'backlog'},{'id': '2', 'title':'progresso'}, {'id': '3', 'title':'concluído'}]);
+    const [tasks, setTasks] = useState<Task[]>([]);
+
     console.log(columns)
 
     function generateId(){
         return Math.floor(Math.random() * 10001)
-    }
-    
-    function createNewColumn() {
-        const columnParaAdicionar: Column = {
-            id: generateId(),
-            title: `Column ${columns.length + 1}`
-        };
-
-        setColumns([...columns, columnParaAdicionar]);
     }
 
     function deleteColumn(id: Id) {
@@ -28,18 +20,38 @@ function KanbanBoard() {
         setColumns(filteredColumns);
     }
 
+    function createTask(columnId: Id) {
+        const newTask: Task = {
+            id: generateId(),
+            columnId,
+            content: `Task ${tasks.length + 1}`
+        };
+
+        setTasks([...tasks, newTask]);
+    }
+
+    function deleteTask(id: Id) {
+        const filteredTasks = tasks.filter((task) => task.id !== id);
+        setTasks(filteredTasks);
+    }
+    
     return (
         <div className="m-auto flex min-h-[700px] w-full items-center justify-center overflow-x-auto overflow-y-hidden px-[40px]">
             <div className="m-auto flex gap-4">
                 <div className="flex gap-4">
                     {
                         columns.map((col) => (
-                           <ColumnContainer key={col.id} column={col} deleteColumn={deleteColumn}/>
+                           <ColumnContainer key={col.id} 
+                                            column={col} 
+                                            deleteColumn={deleteColumn} 
+                                            createTask={createTask}
+                                            tasks={tasks.filter(task => task.columnId === col.id)}
+                                            deleteTask={deleteTask}
+                        />
                         ))              
                     }
                 </div>
                 
-                <Button onClick={() => createNewColumn()}><PlusCircleIcon className="w-4 h-4 mr-1"/> <span className="mb-1 font-bold">add column</span> </Button>
             </div>
         </div>
     )
