@@ -8,6 +8,8 @@ import { Textarea } from "../ui/textarea";
 import { Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { Id } from "@/interfaces/Column";
+import {useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface Props {
     task: Task;
@@ -19,15 +21,52 @@ export default function TaskCard({task, deleteTask, updateTask}: Props){
     const [mouseIsOver, setMouseIsOver] = useState(false);
     const [editMode, setEditMode] = useState(false);
 
+    const {
+        setNodeRef,
+        attributes,
+        listeners,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({
+        id: task.id,
+        data: {
+            type: 'Task',
+            task
+        },
+        disabled: editMode,
+    });
+
+    const style = {
+        transition,
+        transform: CSS.Transform.toString(transform)
+    }
+
     const toggleEditMode = () => {
         setEditMode((prev) => !prev)
         setMouseIsOver(false);
     }
 
+    if (isDragging){
+        return <Card ref={setNodeRef} 
+                    style={style}
+                    className=""
+                    >
+                    <CardContent className="p-2. opacity-50 items-center flex text-left rounded-xl hover:ring-2 hover:ring-inset hover:ring-rose-500 cursor-grab relative">
+                        Dragging
+                    </CardContent>
+                </Card>
+    }
+
     if (editMode) {
         return (
             <Card >
-                <CardContent className="p-2.5 items-center flex text-left rounded-xl hover:ring-2 hover:ring-inset hover:ring-rose-500 cursor-grab relative">
+                <CardContent 
+                            ref={setNodeRef} 
+                            style={style} 
+                            {...attributes}
+                            {...listeners}
+                            className="p-2.5 items-center flex text-left rounded-xl hover:ring-2 hover:ring-inset hover:ring-rose-500 cursor-grab relative">
                     <Textarea value={task.content} 
                               autoFocus
                               placeholder="coloque o nome da task"
@@ -45,7 +84,12 @@ export default function TaskCard({task, deleteTask, updateTask}: Props){
     }
 
     return (
-        <Card onClick={toggleEditMode}>
+        <Card  onClick={toggleEditMode}
+               ref={setNodeRef} 
+               style={style} 
+               {...attributes}
+               {...listeners}
+            >
             <CardContent className="p-2.5 h-[80px] min-h-[80px] items-center flex text-left rounded-xl hover:ring-2 hover:ring-inset
                                   hover:ring-rose-500 cursor-grab relative task "
                          onMouseEnter={() => {

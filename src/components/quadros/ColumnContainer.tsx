@@ -2,6 +2,8 @@ import { Column, Id } from "@/interfaces/Column"
 import { Task } from "@/interfaces/Tasks";
 import { PlusCircleIcon, Trash2Icon } from "lucide-react";
 import TaskCard from "../cards/TaskCard";
+import { SortableContext } from "@dnd-kit/sortable";
+import { useMemo } from "react";
 
 interface Props {
     column: Column;
@@ -16,6 +18,10 @@ interface Props {
 
 function ColumnContainer(props: Props){
     const { column, deleteColumn, createTask, tasks, deleteTask, updateTask } = props;
+
+    const tasksIds = useMemo(() => {
+        return tasks.map(task => task.id)
+    }, [tasks])
 
     return (
         <div className="w-[350px] h-[500px] max-h-[500px] rounded-md flex flex-col">
@@ -33,6 +39,7 @@ function ColumnContainer(props: Props){
             </div>
             {/*TASKS*/}
             <div className='flex flex-grow bg-current flex-col gap-4 p-2 overflow-auto'>
+                <SortableContext items={tasksIds}>
                 {
                 tasks.map( task => (
                     <TaskCard key={task.id} 
@@ -42,6 +49,7 @@ function ColumnContainer(props: Props){
                     />
                 ))
                 }
+                </SortableContext>
             </div>
             {/*FOOTER*/}
             <button className="flex gap-2 items-center justify-center border-2 p-3 bg-zinc-700 border-t-[0.1px] border-t-slate-300 border-transparent hover:text-rose-500 active:bg-black"
