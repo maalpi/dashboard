@@ -34,6 +34,15 @@ function KanbanBoard() {
         const filteredTasks = tasks.filter((task) => task.id !== id);
         setTasks(filteredTasks);
     }
+
+    function updateTask(id: Id, content: string) {
+        const newTasks = tasks.map(task => {
+            if (task.id !== id) return task;
+            return {...task, content}
+        });
+        
+        setTasks(newTasks);
+    }
     
     return (
         <div className="m-auto flex min-h-[700px] w-full items-center justify-center overflow-x-auto overflow-y-hidden px-[40px]">
@@ -47,6 +56,7 @@ function KanbanBoard() {
                                             createTask={createTask}
                                             tasks={tasks.filter(task => task.columnId === col.id)}
                                             deleteTask={deleteTask}
+                                            updateTask={updateTask}
                         />
                         ))              
                     }

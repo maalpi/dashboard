@@ -11,10 +11,11 @@ interface Props {
     tasks: Task[];
 
     deleteTask: (id: Id) => void;
+    updateTask: (id: Id, content: string) => void;
 }
 
 function ColumnContainer(props: Props){
-    const { column, deleteColumn, createTask, tasks, deleteTask } = props;
+    const { column, deleteColumn, createTask, tasks, deleteTask, updateTask } = props;
 
     return (
         <div className="w-[350px] h-[500px] max-h-[500px] rounded-md flex flex-col">
@@ -37,6 +38,7 @@ function ColumnContainer(props: Props){
                     <TaskCard key={task.id} 
                               task={task} 
                               deleteTask={deleteTask}
+                              updateTask={updateTask}
                     />
                 ))
                 }
