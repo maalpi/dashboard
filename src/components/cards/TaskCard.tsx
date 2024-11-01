@@ -50,10 +50,10 @@ export default function TaskCard({task, deleteTask, updateTask}: Props){
     if (isDragging){
         return <Card ref={setNodeRef} 
                     style={style}
-                    className=""
+                    className="opacity-50"
                     >
-                    <CardContent className="p-2. opacity-50 items-center flex text-left rounded-xl hover:ring-2 hover:ring-inset hover:ring-rose-500 cursor-grab relative">
-                        Dragging
+                    <CardContent className="p-2.5 h-[80px] min-h-[80px] items-center flex text-left rounded-xl hover:ring-2 hover:ring-inset
+                                          hover:ring-rose-500 cursor-grab relative task opacity-50">
                     </CardContent>
                 </Card>
     }
