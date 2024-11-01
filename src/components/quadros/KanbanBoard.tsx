@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Column, Id } from "@/interfaces/Column";
 import ColumnContainer from "./ColumnContainer";
 import { Task } from "@/interfaces/Tasks";
@@ -13,13 +13,19 @@ function KanbanBoard() {
     const [columns, setColumns] = useState<Column[]>([{'id': '1', 'title':'backlog'},{'id': '2', 'title':'progresso'}, {'id': '3', 'title':'concluído'}]);
     const [tasks, setTasks] = useState<Task[]>([]);
     const [activeTask, setActiveTask] = useState< Task|null>(null);
+    const [isClient, setIsClient] = useState(false); // Verificação do cliente
+
+    useEffect(() => {
+        //  Isso evita que o código tente acessar document.body quando ele ainda não está definido, estava dando erro de referencia do document.
+        setIsClient(true);
+    }, []);
+
     const sensors = useSensors(
         useSensor(PointerSensor, {activationConstraint: {
             distance: 3,
         }})
     )
 
-    console.log(columns)
 
     function generateId(){
         return Math.floor(Math.random() * 10001)
@@ -55,6 +61,7 @@ function KanbanBoard() {
     }
 
     function onDragStart(event: DragStartEvent) {
+
         if (event.active.data.current?.type === 'Task'){
             setActiveTask(event.active.data.current.task);
             return;
@@ -63,45 +70,44 @@ function KanbanBoard() {
 
     function onDragEnd(event: DragEndEvent) {
         setActiveTask(null);
-    
         const { active, over } = event;
+
         if (!over) return;
-    
         const activeId = active.id;
         const overId = over.id;
-    
+
         if (activeId === overId) return;
-    
-        const isOverAColumn = over.data.current?.type === "Column";
+
         const isOverATask = over.data.current?.type === "Task";
-    
-        setTasks((tasks) => {
-            const activeTaskIndex = tasks.findIndex((task) => task.id === activeId);
-            if (activeTaskIndex === -1) return tasks;
-    
-            const updatedTasks = [...tasks];
-    
-            if (isOverAColumn) {
-                // Mover tarefa para uma nova coluna
-                updatedTasks[activeTaskIndex] = {
-                    ...updatedTasks[activeTaskIndex],
-                    columnId: overId,
-                };
-            } else if (isOverATask) {
-                const overTaskIndex = tasks.findIndex((task) => task.id === overId);
-                if (overTaskIndex === -1) return tasks;
-    
-                // Mover tarefa para a mesma coluna, atualizando a posição
-                updatedTasks[activeTaskIndex].columnId = tasks[overTaskIndex].columnId;
+        const isOverAColumn = over.data.current?.type === "Column";
+
+        setTasks((prevTasks) => {
+            const activeTaskIndex = prevTasks.findIndex((task) => task.id === activeId);
+            if (activeTaskIndex === -1) return prevTasks;
+
+            const updatedTasks = [...prevTasks];
+
+            if (isOverATask) {
+                const overTaskIndex = prevTasks.findIndex((task) => task.id === overId);
+                if (overTaskIndex === -1) return prevTasks;
+
+                // Mover a tarefa dentro da mesma coluna e reordenar
+                updatedTasks[activeTaskIndex].columnId = updatedTasks[overTaskIndex].columnId;
                 return arrayMove(updatedTasks, activeTaskIndex, overTaskIndex);
             }
-    
-            return updatedTasks;
+
+            if (isOverAColumn) {
+                updatedTasks[activeTaskIndex].columnId = overId; // Atualizar a coluna
+                return updatedTasks; // Retornar as tarefas atualizadas
+            }
+
+            return prevTasks; // Se nenhuma condição é atendida, retornar as tarefas sem mudanças
         });
     }
-    
+
     function onDragOver(event: DragOverEvent) {
-        const {active, over} = event;
+        const { active, over } = event;
+
         if (!over) return;
 
         const activeId = active.id;
@@ -110,31 +116,17 @@ function KanbanBoard() {
         if (activeId === overId) return;
 
         const isActiveATask = active.data.current?.type === 'Task';
-        const isOverATask = over.data.current?.type === 'Task';
-
-        if (!isActiveATask) return;
-
-        if(isActiveATask && isOverATask) {
-            setTasks(tasks => {
-                const activeIndex = tasks.findIndex(t => t.id === activeId)
-                const overIndex = tasks.findIndex(t => t.id === overId);
-                
-                tasks[activeIndex].columnId = tasks[overIndex].columnId;
-                
-                return arrayMove(tasks, activeIndex, overIndex);
-            })
-        }
-
         const isOverAColumn = over.data.current?.type === 'Column';
 
         if (isActiveATask && isOverAColumn) {
-            setTasks(tasks => {
-                const activeIndex = tasks.findIndex(t => t.id === activeId)
-                
-                tasks[activeIndex].columnId = overId;
-                
-                return arrayMove(tasks, activeIndex, activeIndex);
-            })
+            setTasks((prevTasks) => {
+                const activeIndex = prevTasks.findIndex((t) => t.id === activeId);
+                if (activeIndex === -1) return prevTasks;
+
+                const updatedTasks = [...prevTasks];
+                updatedTasks[activeIndex].columnId = overId; // Atualizar o columnId
+                return updatedTasks; // Retornar as tarefas atualizadas
+            });
         }
     }
     return (
@@ -156,10 +148,10 @@ function KanbanBoard() {
                     </div>
                 </div>
 
-                {createPortal(
+                {isClient && document.body && createPortal(
                     <DragOverlay>
                         {activeTask && (
-                            <TaskCard 
+                            <TaskCard
                                 task={activeTask}
                                 deleteTask={deleteTask}
                                 updateTask={updateTask}

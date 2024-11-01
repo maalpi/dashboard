@@ -32,7 +32,7 @@ export default function TaskCard({task, deleteTask, updateTask}: Props){
         id: task.id,
         data: {
             type: 'Task',
-            task
+            task,
         },
         disabled: editMode,
     });
