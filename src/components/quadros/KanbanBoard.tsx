@@ -8,17 +8,54 @@ import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, P
 import { createPortal } from "react-dom";
 import TaskCard from "../cards/TaskCard";
 import {arrayMove} from '@dnd-kit/sortable';
+import { FirestoreTasks } from "@/hooks/fireStoreTasks";
+import { db } from "@/db/firebase"; // Importe sua configuração do Firestore
+import { collection, query, where, getDocs, onSnapshot, doc } from "firebase/firestore";
 
-function KanbanBoard() {
+interface KanbanBoardProps {
+    tabelaId: string | null;
+}
+
+function KanbanBoard({ tabelaId }: KanbanBoardProps) {
     const [columns, setColumns] = useState<Column[]>([{'id': '1', 'title':'backlog'},{'id': '2', 'title':'progresso'}, {'id': '3', 'title':'concluído'}]);
     const [tasks, setTasks] = useState<Task[]>([]);
     const [activeTask, setActiveTask] = useState< Task|null>(null);
     const [isClient, setIsClient] = useState(false); // Verificação do cliente
+    const { createTaskFirestore, deleteTaskFirestore, updateTaskFirestore } = FirestoreTasks();
 
     useEffect(() => {
-        //  Isso evita que o código tente acessar document.body quando ele ainda não está definido, estava dando erro de referencia do document.
         setIsClient(true);
-    }, []);
+        if (tabelaId) {
+            const unsubscribe = loadTasks(); // Configura o listener de snapshots ao abrir a página
+
+            return () => {
+                // Remove o listener quando o componente for desmontado
+                unsubscribe();
+            };
+        }
+    }, [tabelaId]);
+
+    function loadTasks() {
+        if (!tabelaId) return () => {};
+
+        const tableDocRef = doc(db, "kanbanTables", tabelaId); // Referência ao documento da tabela
+
+        // Listener para atualizações em tempo real
+        const unsubscribe = onSnapshot(tableDocRef, (docSnapshot) => {
+            if (docSnapshot.exists()) {
+                const data = docSnapshot.data();
+                const loadedTasks = data.tasks || []; // Obtém as tasks ou um array vazio se não existir
+
+                console.log('loading tasks:', loadedTasks);
+                setTasks(loadedTasks); // Atualiza o estado `tasks` com as tarefas carregadas
+            } else {
+                console.log("Nenhuma tabela encontrada com o ID:", tabelaId);
+                setTasks([]); // Se o documento não existir, limpa as tarefas
+            }
+        });
+
+        return unsubscribe;
+    }
 
     const sensors = useSensors(
         useSensor(PointerSensor, {activationConstraint: {
@@ -38,26 +75,34 @@ function KanbanBoard() {
 
     function createTask(columnId: Id) {
         const newTask: Task = {
-            id: generateId(),
+            id: generateId(), // ID gerado temporariamente
             columnId,
             content: `Task ${tasks.length + 1}`
         };
 
-        setTasks([...tasks, newTask]);
+        createTaskFirestore(newTask, tabelaId).then((savedTask) => {
+            if (savedTask) {
+                setTasks([...tasks, savedTask]);
+            }
+        });
     }
 
     function deleteTask(id: Id) {
-        const filteredTasks = tasks.filter((task) => task.id !== id);
-        setTasks(filteredTasks);
+        deleteTaskFirestore(id, tabelaId).then(() => {
+            const filteredTasks = tasks.filter((task) => task.id !== id);
+            setTasks(filteredTasks);
+        });
     }
 
     function updateTask(id: Id, content: string) {
         const newTasks = tasks.map(task => {
             if (task.id !== id) return task;
-            return {...task, content}
+            return {...task, content};
         });
-        
-        setTasks(newTasks);
+
+        updateTaskFirestore(id, { content }, tabelaId).then(() => {
+            setTasks(newTasks);
+        });
     }
 
     function onDragStart(event: DragStartEvent) {
