@@ -116,36 +116,38 @@ function KanbanBoard({ tabelaId }: KanbanBoardProps) {
     function onDragEnd(event: DragEndEvent) {
         setActiveTask(null);
         const { active, over } = event;
-
+    
         if (!over) return;
         const activeId = active.id;
         const overId = over.id;
-
+    
         if (activeId === overId) return;
-
+    
         const isOverATask = over.data.current?.type === "Task";
         const isOverAColumn = over.data.current?.type === "Column";
-
+    
         setTasks((prevTasks) => {
             const activeTaskIndex = prevTasks.findIndex((task) => task.id === activeId);
             if (activeTaskIndex === -1) return prevTasks;
-
+    
             const updatedTasks = [...prevTasks];
-
+    
             if (isOverATask) {
                 const overTaskIndex = prevTasks.findIndex((task) => task.id === overId);
                 if (overTaskIndex === -1) return prevTasks;
-
+    
                 // Mover a tarefa dentro da mesma coluna e reordenar
                 updatedTasks[activeTaskIndex].columnId = updatedTasks[overTaskIndex].columnId;
                 return arrayMove(updatedTasks, activeTaskIndex, overTaskIndex);
             }
-
+    
             if (isOverAColumn) {
                 updatedTasks[activeTaskIndex].columnId = overId; // Atualizar a coluna
+                // Atualizar a tarefa no Firestore
+                updateTaskFirestore(activeId, { columnId: overId }, tabelaId); // Salvar a nova coluna no Firestore
                 return updatedTasks; // Retornar as tarefas atualizadas
             }
-
+    
             return prevTasks; // Se nenhuma condição é atendida, retornar as tarefas sem mudanças
         });
     }
@@ -170,6 +172,7 @@ function KanbanBoard({ tabelaId }: KanbanBoardProps) {
 
                 const updatedTasks = [...prevTasks];
                 updatedTasks[activeIndex].columnId = overId; // Atualizar o columnId
+                updateTaskFirestore(activeId, { columnId: overId }, tabelaId); // Salvar a nova coluna no Firestore
                 return updatedTasks; // Retornar as tarefas atualizadas
             });
         }
