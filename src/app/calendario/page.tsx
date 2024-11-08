@@ -7,18 +7,9 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import brLocale from '@fullcalendar/core/locales/pt-br';
 import { useEffect, useState } from 'react';
 import { EventSourceInput } from '@fullcalendar/core/index.js'
- 
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
+
+import { CriaEventoDialog } from '@/components/dialog/criaEventoCalendarioDialog';
+import { ApagaEventoDialog } from '@/components/dialog/apagaEventoCalendarioDialogo';
 
 interface Event {
     title: string;
@@ -153,56 +144,20 @@ export default function Calendario() {
                         ))}
                 </div>
             </div>
+            
+            <ApagaEventoDialog
+                showDeleteModal={showDeleteModal}
+                setShowDeleteModal={setShowDeleteModal}
+                handleDelete={handleDelete}
+            />
 
-            <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
-                <DialogContent className="sm:max-w-md sm:justify-center">
-                    <DialogHeader>
-                    <DialogTitle className='text-center'>Apagar evento</DialogTitle>
-                    <DialogDescription className='text-center'>
-                        você tem certeza que quer apagar esse evento?
-                    </DialogDescription>
-                    </DialogHeader>            
-                    <DialogFooter className="sm:justify-center">
-
-                            <Button type="button" variant="destructive" onClick={handleDelete}>
-                                Apagar
-                            </Button>
-                    <DialogClose asChild>
-                        <Button type="button" variant="secondary">
-                            Cancelar
-                        </Button>
-                    </DialogClose>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-
-            <Dialog open={showModal} onOpenChange={setShowModal}>
-                <DialogContent className="sm:max-w-md sm:justify-center">
-                    <DialogHeader>
-                    <DialogTitle className='text-center'>Add Event</DialogTitle>
-                    <DialogDescription className='text-center'>
-                        adicionar um novo evento?
-                    </DialogDescription>
-                    <form action="submit" onSubmit={handleSubmit}>
-                        <Input id="title" name="title"  value={newEvent.title} onChange={(e) => handleChange(e)} placeholder="title" />
-                        <button
-                              type="submit"
-                              className="inline-flex w-full mt-1 justify-center rounded-md bg-violet-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-violet-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 sm:col-start-2 disabled:opacity-25"
-                              disabled={newEvent.title === ''}
-                            >
-                              Create
-                        </button>
-                    </form>
-                    </DialogHeader>            
-                    <DialogFooter className="sm:justify-center">
-                    <DialogClose asChild>
-                        <Button type="button"  variant="secondary">
-                            Cancelar
-                        </Button>
-                    </DialogClose>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+            <CriaEventoDialog
+                showModal={showModal}
+                setShowModal={setShowModal}
+                newEvent={newEvent}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+            />
         </main>
     )
 }
