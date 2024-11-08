@@ -6,7 +6,7 @@ import interactionPlugin, { Draggable, DropArg } from '@fullcalendar/interaction
 import timeGridPlugin from '@fullcalendar/timegrid';
 import brLocale from '@fullcalendar/core/locales/pt-br';
 import { useEffect, useState } from 'react';
-
+import { EventSourceInput } from '@fullcalendar/core/index.js'
  
 import { Button } from "@/components/ui/button"
 import {
@@ -19,7 +19,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 
 interface Event {
     title: string;
@@ -96,6 +95,26 @@ export default function Calendario() {
         setIdToDelete(Number(data.event.id));
     }
 
+    
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        setNewEvent({
+          ...newEvent,
+          title: e.target.value
+        })
+    }
+    
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+        setAllEvents([...allEvents, newEvent])
+        setShowModal(false)
+        setNewEvent({
+          title: '',
+          start: '',
+          allDay: false,
+          id: 0
+        })
+    }
+
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-16">
@@ -108,11 +127,11 @@ export default function Calendario() {
                                     timeGridPlugin
                                     ]}
                                 headerToolbar = {{
-                                    left: 'prev,next today',
+                                    left: 'prev,next',
                                     center: 'title',
-                                    right: 'resourceTimelineWook, dayGridMonth, timeGridWeek'
+                                    right: 'today'
                                 }} 
-                                events = {allEvents}
+                                events = {allEvents as EventSourceInput}
                                 nowIndicator={true}
                                 editable={true}
                                 droppable={true}
@@ -127,7 +146,7 @@ export default function Calendario() {
                         <h1 className='font-bold text-lg text-center'>Drag event</h1>
                         {events.map(e => (
                             <div key={e.id} 
-                                 className='fc-event border-2 p-1 m-2 w-full rounded-md ml-auto text-center bg-white text-violet-700'
+                                 className='fc-event border-2 p-1 m-2 w-full cursor-grab rounded-md ml-auto text-center bg-white text-violet-700'
                                  title={e.title}>
                                     {e.title}
                             </div>
@@ -150,6 +169,34 @@ export default function Calendario() {
                             </Button>
                     <DialogClose asChild>
                         <Button type="button" variant="secondary">
+                            Cancelar
+                        </Button>
+                    </DialogClose>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={showModal} onOpenChange={setShowModal}>
+                <DialogContent className="sm:max-w-md sm:justify-center">
+                    <DialogHeader>
+                    <DialogTitle className='text-center'>Add Event</DialogTitle>
+                    <DialogDescription className='text-center'>
+                        adicionar um novo evento?
+                    </DialogDescription>
+                    <form action="submit" onSubmit={handleSubmit}>
+                        <Input id="title" name="title"  value={newEvent.title} onChange={(e) => handleChange(e)} placeholder="title" />
+                        <button
+                              type="submit"
+                              className="inline-flex w-full mt-1 justify-center rounded-md bg-violet-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-violet-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 sm:col-start-2 disabled:opacity-25"
+                              disabled={newEvent.title === ''}
+                            >
+                              Create
+                        </button>
+                    </form>
+                    </DialogHeader>            
+                    <DialogFooter className="sm:justify-center">
+                    <DialogClose asChild>
+                        <Button type="button"  variant="secondary">
                             Cancelar
                         </Button>
                     </DialogClose>
