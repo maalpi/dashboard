@@ -1,15 +1,21 @@
 // CalendarBoard.tsx
 'use client'
 
+import { useEffect, useState } from 'react';
+
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { Draggable, DropArg } from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import brLocale from '@fullcalendar/core/locales/pt-br';
-import { useEffect, useState } from 'react';
+
+import { db } from '@/db/firebase';
+import { collection, addDoc, getDocs, DocumentData, deleteDoc, doc } from 'firebase/firestore';
+
 import { EventSourceInput } from '@fullcalendar/core';
 import { CriaEventoDialog } from '@/components/dialog/criaEventoCalendarioDialog';
 import { ApagaEventoDialog } from '@/components/dialog/apagaEventoCalendarioDialogo';
+
 
 interface Event {
     title: string;
@@ -38,6 +44,34 @@ export default function CalendarBoard() {
         id: 0,
     });
 
+    // Função para carregar os eventos do Firestore ao iniciar o componente
+    useEffect(() => {
+        const loadEvents = async () => {
+            const querySnapshot = await getDocs(collection(db, 'events'));
+            const loadedEvents = querySnapshot.docs.map((doc) => {
+                const data = doc.data() as DocumentData;
+    
+                // Certifique-se de que os dados tenham todos os campos necessários
+                return {
+                    id: doc.id,
+                    title: data.title || '',
+                    start: data.start ? data.start.toDate() : '',
+                    allDay: data.allDay || false,
+                } as Event;
+            });
+            
+            console.log(loadedEvents)
+            setAllEvents(loadedEvents);
+        };
+    
+        loadEvents();
+    }, []);
+
+    // Função para salvar um evento no Firestore
+    const saveEvent = async (event: Event) => {
+        await addDoc(collection(db, 'events'), event);
+    };
+
     useEffect(() => {
         let draggableEl = document.getElementById('draggable-el');
 
@@ -54,10 +88,20 @@ export default function CalendarBoard() {
         }
     }, []);
 
-    const handleDelete = () => {
-        setAllEvents(allEvents.filter((event) => Number(event.id) !== Number(idToDelete)));
-        setShowDeleteModal(false);
-        setIdToDelete(null);
+    const handleDelete = async () => {
+        if (idToDelete) {
+            try {
+                // Deletar o evento do Firestore usando o ID
+                await deleteDoc(doc(db, 'events', String(idToDelete)));
+                
+                // Remover o evento da lista local
+                setAllEvents(allEvents.filter((event) => event.id !== String(idToDelete)));
+                setShowDeleteModal(false);
+                setIdToDelete(null);
+            } catch (error) {
+                console.error("Erro ao deletar o evento do Firestore:", error);
+            }
+        }
     };
 
     const handleDateClick = (arg: { date: Date; allDay: boolean }) => {
@@ -79,6 +123,7 @@ export default function CalendarBoard() {
             id: new Date().getTime(),
         };
         setAllEvents([...allEvents, event]);
+        saveEvent(event); // Salva o novo evento no Firestore
     };
 
     const handleDeleteModal = (data: { event: { id: string } }) => {
@@ -96,6 +141,7 @@ export default function CalendarBoard() {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setAllEvents([...allEvents, newEvent]);
+        saveEvent(newEvent); // Salva o evento criado no Firestore
         setShowModal(false);
         setNewEvent({
             title: '',
