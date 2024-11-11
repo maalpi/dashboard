@@ -21,17 +21,17 @@ interface Event {
     title: string;
     start: Date | string;
     allDay: boolean;
-    id: string | number;
+    id: string;
 }
 
 export default function CalendarBoard() {
-    const [events, setEvents] = useState([
+    const events = [
         { title: 'event 1', id: '1' },
         { title: 'event 2', id: '2' },
         { title: 'event 3', id: '3' },
         { title: 'event 4', id: '4' },
         { title: 'event 5', id: '5' },
-    ]);
+    ];
 
     const [allEvents, setAllEvents] = useState<Event[]>([]);
     const [showModal, setShowModal] = useState(false);
@@ -192,7 +192,7 @@ export default function CalendarBoard() {
                     selectMirror={true}
                     eventDrop={(info) => {
                         const { id, start, allDay } = info.event;
-                        handleUpdate(id, start, allDay || false);
+                        handleUpdate(id, start ? start.toISOString() : '', allDay || false);
                     }}
                     dateClick={handleDateClick}
                     drop={addEvent}
@@ -222,7 +222,7 @@ export default function CalendarBoard() {
                 showModal={showModal}
                 setShowModal={setShowModal}
                 newEvent={newEvent}
-                handleChange={handleChange}
+                handleChange={handleChange} 
                 handleSubmit={handleSubmit}
             />
         </div>
