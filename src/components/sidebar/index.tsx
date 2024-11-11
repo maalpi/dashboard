@@ -4,7 +4,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { Home, Package2, PanelBottom, Calendar, Settings2, ShoppingBag, Users2,Kanban } from "lucide-react"
+import { Home, Package2, PanelBottom, Calendar, Settings2, ShoppingBag, Users2,Kanban, NotepadText } from "lucide-react"
 import Link from "next/link"
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "../ui/tooltip"
 import DarkLightToggle from "../switch/theme"
@@ -62,7 +62,7 @@ export function Sidebar() {
                                     rounded-lg text-muted-foreground transition-colors hover:text-foreground"
                                 >
                                     <Kanban className="h-5 w-5"/>
-                                    <span className="sr-only">Produtos</span>
+                                    <span className="sr-only">Kanban</span>
                                 </Link>
                             </TooltipTrigger>
                             <TooltipContent side='right'>Kanban</TooltipContent>
@@ -74,11 +74,11 @@ export function Sidebar() {
                                     className="flex h-9 w-9 shrink-0 items-center justify-center 
                                     rounded-lg text-muted-foreground transition-colors hover:text-foreground"
                                 >
-                                    <Users2 className="h-5 w-5"/>
-                                    <span className="sr-only">Clientes</span>
+                                    <NotepadText className="h-5 w-5"/>
+                                    <span className="sr-only">Notas</span>
                                 </Link>
                             </TooltipTrigger>
-                            <TooltipContent side='right'>Clientes</TooltipContent>
+                            <TooltipContent side='right'>Notas</TooltipContent>
                         </Tooltip>
 
                         <Tooltip>

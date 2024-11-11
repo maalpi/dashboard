@@ -10,7 +10,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import brLocale from '@fullcalendar/core/locales/pt-br';
 
 import { db } from '@/db/firebase';
-import { collection, addDoc, getDocs, DocumentData, deleteDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, DocumentData, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 
 import { EventSourceInput } from '@fullcalendar/core';
 import { CriaEventoDialog } from '@/components/dialog/criaEventoCalendarioDialog';
@@ -76,6 +76,7 @@ export default function CalendarBoard() {
         let draggableEl = document.getElementById('draggable-el');
 
         if (draggableEl) {
+            console.log('draggable ativado');
             new Draggable(draggableEl, {
                 itemSelector: '.fc-event',
                 eventData: function (eventEl) {
@@ -89,13 +90,13 @@ export default function CalendarBoard() {
     }, []);
 
     const handleDelete = async () => {
-        if (idToDelete) {
+        if (idToDelete !== null) {
             try {
-                // Deletar o evento do Firestore usando o ID
-                await deleteDoc(doc(db, 'events', String(idToDelete)));
-                
-                // Remover o evento da lista local
-                setAllEvents(allEvents.filter((event) => event.id !== String(idToDelete)));
+                // Deleta o evento do Firestore usando o ID correto
+                await deleteDoc(doc(db, 'events', idToDelete.toString()));
+            
+                // Remove o evento do estado local
+                setAllEvents(allEvents.filter((event) => event.id !== idToDelete));
                 setShowDeleteModal(false);
                 setIdToDelete(null);
             } catch (error) {
@@ -122,6 +123,7 @@ export default function CalendarBoard() {
             allDay: data.allDay,
             id: new Date().getTime(),
         };
+        console.log('salvando:',event.start )
         setAllEvents([...allEvents, event]);
         saveEvent(event); // Salva o novo evento no Firestore
     };
@@ -151,6 +153,25 @@ export default function CalendarBoard() {
         });
     };
 
+    const updateEvent = async (eventId: string, updatedData: Partial<Event>) => {
+        const eventRef = doc(db, 'events', eventId);
+        await updateDoc(eventRef, updatedData);
+    };
+
+    const handleUpdate = async (eventId: string, newStart: string, allDay: boolean) => {
+        try {
+            // Atualiza o evento no Firestore
+            await updateEvent(eventId, { start: newStart, allDay });
+    
+            // Atualiza o estado local para refletir a mudança
+            setAllEvents(allEvents.map(event =>
+                event.id === parseInt(eventId) ? { ...event, start: newStart, allDay } : event
+            ));
+        } catch (error) {
+            console.error("Erro ao atualizar o evento:", error);
+        }
+    };
+
     return (
         <div className="grid grid-cols-8">
             <div className="col-span-6">
@@ -168,6 +189,10 @@ export default function CalendarBoard() {
                     droppable={true}
                     selectable={true}
                     selectMirror={true}
+                    eventDrop={(info) => {
+                        const { id, start, allDay } = info.event;
+                        handleUpdate(id, start, allDay || false);
+                    }}
                     dateClick={handleDateClick}
                     drop={addEvent}
                     eventClick={handleDeleteModal}
