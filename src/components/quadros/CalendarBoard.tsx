@@ -21,7 +21,7 @@ interface Event {
     title: string;
     start: Date | string;
     allDay: boolean;
-    id: number;
+    id: string | number;
 }
 
 export default function CalendarBoard() {
@@ -36,12 +36,12 @@ export default function CalendarBoard() {
     const [allEvents, setAllEvents] = useState<Event[]>([]);
     const [showModal, setShowModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [idToDelete, setIdToDelete] = useState<number | null>(null);
+    const [idToDelete, setIdToDelete] = useState<string | null>(null);
     const [newEvent, setNewEvent] = useState<Event>({
         title: '',
         start: '',
         allDay: false,
-        id: 0,
+        id: '0',
     });
 
     // Função para carregar os eventos do Firestore ao iniciar o componente
@@ -53,7 +53,7 @@ export default function CalendarBoard() {
     
                 // Certifique-se de que os dados tenham todos os campos necessários
                 return {
-                    id: doc.id,
+                    id: doc.id || 0,
                     title: data.title || '',
                     start: data.start ? data.start.toDate() : '',
                     allDay: data.allDay || false,
@@ -91,11 +91,9 @@ export default function CalendarBoard() {
 
     const handleDelete = async () => {
         if (idToDelete !== null) {
+            console.log("Tentando deletar o evento com ID:", idToDelete);
             try {
-                // Deleta o evento do Firestore usando o ID correto
-                await deleteDoc(doc(db, 'events', idToDelete.toString()));
-            
-                // Remove o evento do estado local
+                await deleteDoc(doc(db, 'events', idToDelete));
                 setAllEvents(allEvents.filter((event) => event.id !== idToDelete));
                 setShowDeleteModal(false);
                 setIdToDelete(null);
@@ -103,14 +101,14 @@ export default function CalendarBoard() {
                 console.error("Erro ao deletar o evento do Firestore:", error);
             }
         }
-    };
+};
 
     const handleDateClick = (arg: { date: Date; allDay: boolean }) => {
         setNewEvent({
             ...newEvent,
             start: arg.date,
             allDay: arg.allDay,
-            id: new Date().getTime(),
+            id: new Date().getTime().toString(),
         });
         setShowModal(true);
     };
@@ -121,7 +119,7 @@ export default function CalendarBoard() {
             start: data.date.toISOString(),
             title: data.draggedEl.innerText,
             allDay: data.allDay,
-            id: new Date().getTime(),
+            id: new Date().getTime().toString(),
         };
         console.log('salvando:',event.start )
         setAllEvents([...allEvents, event]);
@@ -129,8 +127,11 @@ export default function CalendarBoard() {
     };
 
     const handleDeleteModal = (data: { event: { id: string } }) => {
+        console.log(data.event.id);
+        console.log(data.event);
+
         setShowDeleteModal(true);
-        setIdToDelete(Number(data.event.id));
+        setIdToDelete(data.event.id);
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -149,7 +150,7 @@ export default function CalendarBoard() {
             title: '',
             start: '',
             allDay: false,
-            id: 0,
+            id: '0',
         });
     };
 
@@ -165,7 +166,7 @@ export default function CalendarBoard() {
     
             // Atualiza o estado local para refletir a mudança
             setAllEvents(allEvents.map(event =>
-                event.id === parseInt(eventId) ? { ...event, start: newStart, allDay } : event
+                event.id === (eventId) ? { ...event, start: newStart, allDay } : event
             ));
         } catch (error) {
             console.error("Erro ao atualizar o evento:", error);

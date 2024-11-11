@@ -16,7 +16,7 @@ import { Input } from "../ui/input";
 interface CriaEventoDialogProps {
     showModal: boolean;
     setShowModal: (value: boolean) => void;
-    newEvent: { title: string; start: string | Date; allDay: boolean; id: number };
+    newEvent: { title: string; start: string | Date; allDay: boolean; id: string };
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
