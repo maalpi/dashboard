@@ -12,6 +12,9 @@ import { Button } from "../ui/button";
 
  
 export function CardNotas({ onAdd }) {
+
+  const [isExpanded, setExpanded] = useState(false);
+
   const [nota, setNota] = useState({
     title: "",
     content: "",
@@ -27,6 +30,11 @@ export function CardNotas({ onAdd }) {
     })
   }
 
+  function handleExpanded() {
+    setExpanded(true);
+  }
+
+
   function submitButton(event){
     onAdd(nota);
     event.preventDefault();
@@ -38,18 +46,22 @@ export function CardNotas({ onAdd }) {
         <form>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1">
+            {isExpanded && ( 
               <Input id="title" 
                      name="title" 
                      value={nota.title} 
                      onChange={handleChange}
                      placeholder="Titulo" 
-                     className="outline-none shadow-none border-none resize-none text-xl placeholder:italic"/>
+                     className="outline-none shadow-none ease-in-out border-none resize-none text-xl placeholder:italic"/>
+            )}
               <p>
                 <Textarea name='content' 
                           value={nota.content} 
+                          onClick={handleExpanded}
                           id='content' 
                           onChange={handleChange}
                           placeholder="escreva a nota..." 
+                          rows={isExpanded ? 3 : 1}
                           className="outline-none resize-none shadow-none border-none placeholder:italic"></Textarea>
               </p>
             </div>

@@ -6,9 +6,16 @@ import { useState } from "react";
 
 export default function Notas() {
     const [notes, setNotes] = useState([])
+    
     function addNote(newNote) {
         setNotes((prevValue) => {
             return [...prevValue, newNote]
+        });
+    }
+
+    function deleteNotes(id) {
+        setNotes((preValue) => {
+          return [...preValue.filter((note, index) => index !== id)];
         });
     }
 
@@ -21,6 +28,7 @@ export default function Notas() {
                         id={index} 
                         title={notes.title} 
                         content={notes.content}
+                        onDelete={deleteNotes}
                     />
                 ))}
             </div>
