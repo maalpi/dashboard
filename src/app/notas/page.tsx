@@ -1,9 +1,29 @@
-import { CardNotas } from "@/components/cards/NotasCard";
+'use client'
+
+import { CardNotas } from "@/components/cards/createNotasCard";
+import { Nota } from "@/components/cards/notesCard";
+import { useState } from "react";
 
 export default function Notas() {
+    const [notes, setNotes] = useState([])
+    function addNote(newNote) {
+        setNotes((prevValue) => {
+            return [...prevValue, newNote]
+        });
+    }
+
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-16">
-            <CardNotas />
+        <main className="flex min-h-screen flex-col items-center p-16">
+            <CardNotas onAdd={addNote} />
+            <div className="grid grid-cols-1 sm:grid-cols-6 gap-4 mt-8">
+                {notes.map((notes,index) => (
+                    <Nota key={index} 
+                        id={index} 
+                        title={notes.title} 
+                        content={notes.content}
+                    />
+                ))}
+            </div>
         </main>
     );
 }
