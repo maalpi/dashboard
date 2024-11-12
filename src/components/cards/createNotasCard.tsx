@@ -10,8 +10,11 @@ import { Textarea } from "../ui/textarea"
 import { useState } from 'react';
 import { Button } from "../ui/button";
 
+interface CardNotasProps {
+  onAdd: (nota: { title: string; content: string }) => void;
+}
  
-export function CardNotas({ onAdd }) {
+export function CardNotas({ onAdd }: CardNotasProps) {
 
   const [isExpanded, setExpanded] = useState(false);
 
@@ -20,7 +23,7 @@ export function CardNotas({ onAdd }) {
     content: "",
   });
 
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const {name, value} = e.target
     setNota(preValue => {
       return {
@@ -35,7 +38,7 @@ export function CardNotas({ onAdd }) {
   }
 
 
-  function submitButton(event){
+  function submitButton(event: React.MouseEvent<HTMLButtonElement>){
     onAdd(nota);
     event.preventDefault();
   }

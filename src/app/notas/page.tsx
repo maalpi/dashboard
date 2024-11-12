@@ -4,16 +4,21 @@ import { CardNotas } from "@/components/cards/createNotasCard";
 import { Nota } from "@/components/cards/notesCard";
 import { useState } from "react";
 
+interface Note {
+    title: string;
+    content: string;
+}
+
 export default function Notas() {
-    const [notes, setNotes] = useState([])
+    const [notes, setNotes] = useState<Note[]>([])
     
-    function addNote(newNote) {
+    function addNote(newNote: Note) {
         setNotes((prevValue) => {
             return [...prevValue, newNote]
         });
     }
 
-    function deleteNotes(id) {
+    function deleteNotes(id: number) {
         setNotes((preValue) => {
           return [...preValue.filter((note, index) => index !== id)];
         });
