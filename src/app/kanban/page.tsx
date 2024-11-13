@@ -7,8 +7,14 @@ import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 
+interface KanbanTable {
+  id: string;
+  name: string;
+  imageUrl: string;
+}
+
 export default function Home() {
-  const [kanbanTables, setKanbanTables] = useState([]); 
+  const [kanbanTables, setKanbanTables] = useState<KanbanTable[]>([]); 
   const [mouseIsOver, setMouseIsOver] = useState(false);
 
   const router = useRouter(); 
@@ -19,7 +25,7 @@ export default function Home() {
     const tables = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
-    }));
+    })) as KanbanTable[];
     setKanbanTables(tables);
   };
 
@@ -28,7 +34,7 @@ export default function Home() {
   }, []);
 
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string) => {
     const confirmed = window.confirm("Tem certeza que deseja deletar este item?");
     if (confirmed) {
       try {
@@ -40,7 +46,7 @@ export default function Home() {
     }
   };
 
-  const handlePage = (tableName) => {
+  const handlePage = (tableName: string) => {
     router.push(`/tabela/${tableName}`);
   };
 
