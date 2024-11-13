@@ -16,7 +16,12 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "../ui/input";
 
-export function KanbanDialog() {
+
+interface KanbanDialogProps {
+  onKanbanCreated: () => void; // Recebe a função de callback como prop
+}
+
+export function KanbanDialog({ onKanbanCreated }: KanbanDialogProps) {
   const [name, setName] = useState('');        // Nome da tabela
   const [description, setDescription] = useState('');  // Descrição da tabela
   const [uploading, setUploading] = useState(false);   // Estado para indicar o progresso
@@ -37,6 +42,9 @@ export function KanbanDialog() {
       // Reseta os estados
       setName('');
       setDescription('');
+      
+      onKanbanCreated();
+      
     } catch (error) {
       console.error('Erro ao criar tabela:', error);
     } finally {

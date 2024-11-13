@@ -54,7 +54,7 @@ export default function Home() {
     <main className="sm:ml-14 p-4 ">
       <div className="flex">
         <h1 className="text-2xl mb-4 font-semibold">Kanban</h1>
-        <KanbanDialog />
+        <KanbanDialog onKanbanCreated={fetchKanbanTables}/>
       </div>
       <section className="grid grid-cols-2 sm:grid-cols-6 gap-4">
         {kanbanTables.map((table) => (
