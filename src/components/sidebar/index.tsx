@@ -4,7 +4,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { Home, Package2, PanelBottom, Calendar, Settings2, ShoppingBag, Users2,Kanban, NotepadText } from "lucide-react"
+import { Home, PanelBottom, Calendar, Settings2, Kanban, NotepadText } from "lucide-react"
 import Link from "next/link"
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "../ui/tooltip"
 import DarkLightToggle from "../switch/theme"
@@ -140,7 +140,7 @@ export function Sidebar() {
                                 </Link>
 
                                 <Link 
-                                    href="#" 
+                                    href="/" 
                                     className="flex px-2.5 gap-4 text-muted-foreground items-center 
                                             hover:text-foreground"
                                     prefetch={false}
@@ -150,33 +150,33 @@ export function Sidebar() {
                                 </Link>
 
                                 <Link 
-                                    href="#" 
+                                    href="/calendario" 
                                     className="flex px-2.5 gap-4 text-muted-foreground items-center 
                                             hover:text-foreground"
                                     prefetch={false}
                                 >
-                                    <ShoppingBag className="h-5 w-5 transition-all"/>
-                                    Pedidos
+                                    <Calendar className="h-5 w-5 transition-all"/>
+                                    Calendario
                                 </Link>
 
                                 <Link 
-                                    href="#" 
+                                    href="/kanban" 
                                     className="flex px-2.5 gap-4 text-muted-foreground items-center 
                                             hover:text-foreground"
                                     prefetch={false}
                                 >
-                                    <Package2 className="h-5 w-5 transition-all"/>
-                                    Produtos
+                                    <Kanban className="h-5 w-5 transition-all"/>
+                                    Kanban
                                 </Link>
 
                                 <Link 
-                                    href="#" 
+                                    href="/notas" 
                                     className="flex px-2.5 gap-4 text-muted-foreground items-center 
                                             hover:text-foreground"
                                     prefetch={false}
                                 >
-                                    <Users2 className="h-5 w-5 transition-all"/>
-                                    Clientes
+                                    <NotepadText className="h-5 w-5 transition-all"/>
+                                    Notas
                                 </Link>
 
                                 <Link 
