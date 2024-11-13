@@ -27,12 +27,12 @@ export default function Notas() {
     return (
         <main className="flex min-h-screen flex-col items-center p-16">
             <CardNotas onAdd={addNote} />
-            <div className="grid grid-cols-1 sm:grid-cols-6 gap-4 mt-8">
-                {notes.map((notes,index) => (
+            <div className="grid grid-cols-1 sm:grid-cols-6 gap-4 mt-8 auto-rows-min">
+                {notes.map((note, index) => (
                     <Nota key={index} 
                         id={index} 
-                        title={notes.title} 
-                        content={notes.content}
+                        title={note.title} 
+                        content={note.content}
                         onDelete={deleteNotes}
                     />
                 ))}
