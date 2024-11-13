@@ -29,16 +29,16 @@ export default function Home() {
   };
 
   return (
-    <main className="sm:ml-14 p-4">
+    <main className="sm:ml-14 p-4 ">
       <div className="flex">
         <h1 className="text-2xl mb-4 font-semibold">Kanban</h1>
         <KanbanDialog />
       </div>
-      <section className="grid grid-cols-1 sm:grid-cols-6 gap-4">
+      <section className="grid grid-cols-2 sm:grid-cols-6 gap-4">
         {kanbanTables.map((table) => (
         <Card 
             key={table.id} 
-            className="w-[200px] p-4 border rounded-md cursor-pointer hover:bg-gray-200 transition-all hover:text-black" 
+            className="sm:w-[200px] p-4 border rounded-md cursor-pointer hover:bg-gray-200 transition-all hover:text-black" 
             onClick={() => handlePage(table.name)}
         > 
             <CardTitle className="transition-all">{table.name}</CardTitle>
