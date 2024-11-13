@@ -7,7 +7,7 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { Textarea } from "../ui/textarea"
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from "../ui/button";
 
 interface CardNotasProps {
@@ -17,11 +17,26 @@ interface CardNotasProps {
 export function CardNotas({ onAdd }: CardNotasProps) {
 
   const [isExpanded, setExpanded] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const [nota, setNota] = useState({
     title: "",
     content: "",
   });
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
+        setExpanded(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const {name, value} = e.target
@@ -44,7 +59,7 @@ export function CardNotas({ onAdd }: CardNotasProps) {
   }
 
   return (
-    <Card className="md:w-[600px] w-[350px] shadow-md">
+    <Card ref={cardRef} className="md:w-[600px] w-[350px] shadow-md" >
       <CardContent className="p-2">
         <form>
           <div className="grid w-full items-center gap-4">
