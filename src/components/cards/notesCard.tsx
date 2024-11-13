@@ -30,7 +30,7 @@ export function Nota({ title, content, onDelete, id }: NoteProps) {
           {mouseIsOver && (
             <button
               onClick={() => onDelete(id)}
-              className="float-right ml-4 bg-transparent border-none shadow-none hover:bg-transparent ease-in"
+              className="float-right ml-4 bg-transparent border-none hover:bg-transparent ease-in"
             >
               <Trash2 size={17} className="text-red-500 hover:text-red-950 ease-in" />
             </button>

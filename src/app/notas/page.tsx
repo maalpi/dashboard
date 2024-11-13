@@ -30,10 +30,10 @@ export default function Notas() {
             <div className="grid grid-cols-1 sm:grid-cols-6 gap-4 mt-8 auto-rows-min">
                 {notes.map((note, index) => (
                     <Nota key={index} 
-                        id={index} 
-                        title={note.title} 
-                        content={note.content}
-                        onDelete={deleteNotes}
+                          id={index} 
+                          title={note.title} 
+                          content={note.content}
+                          onDelete={deleteNotes}
                     />
                 ))}
             </div>
