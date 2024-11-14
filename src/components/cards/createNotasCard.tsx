@@ -55,6 +55,10 @@ export function CardNotas({ onAdd }: CardNotasProps) {
 
   function submitButton(event: React.MouseEvent<HTMLButtonElement>){
     onAdd(nota);
+    setNota({
+      title: '',
+      content: ''
+    });
     event.preventDefault();
   }
 
