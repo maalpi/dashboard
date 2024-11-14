@@ -189,7 +189,7 @@ export default function CalendarBoard() {
                     editable={true}
                     // height={500}
                     // contentHeight={200}
-                    aspectRatio={0.67}
+                    // aspectRatio={0.67}
                     droppable={true}
                     selectable={true}
                     selectMirror={true}
