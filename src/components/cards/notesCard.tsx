@@ -11,8 +11,8 @@ import { Trash2 } from "lucide-react";
 interface NoteProps {
   title: string;
   content: string;
-  onDelete: (id: number) => void;
-  id: number;
+  onDelete: (id: string) => void;
+  id: string;
 }
 
 export function Nota({ title, content, onDelete, id }: NoteProps) {

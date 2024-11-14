@@ -2,9 +2,13 @@
 
 import { CardNotas } from "@/components/cards/createNotasCard";
 import { Nota } from "@/components/cards/notesCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import { db } from "@/db/firebase"; // Importar o db do seu Firebase
+import { addDoc, collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 
 interface Note {
+    id?: string;
     title: string;
     content: string;
 }
@@ -12,16 +16,45 @@ interface Note {
 export default function Notas() {
     const [notes, setNotes] = useState<Note[]>([])
     
+    // Função para buscar os dados do Firestore
+    const fetchNoteTable = async () => {
+        const querySnapshot = await getDocs(collection(db, "notes"));
+        const tables = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        })) as Note[];
+        setNotes(tables);
+    };
+
+    useEffect(() => {
+        fetchNoteTable(); // Chama a função ao montar o componente
+    }, []);
+
+    // salvando as notas criadas no Firestore
+    const saveNota = async (nota: Note) => {
+        try {
+            const docRef = await addDoc(collection(db, "notes"), nota);
+            const newNoteWithId = { ...nota, id: docRef.id };
+            setNotes((prevNotes) => [...prevNotes, newNoteWithId]);
+        } catch(e) {
+            console.log(e);
+        }
+    };
+    
     function addNote(newNote: Note) {
-        setNotes((prevValue) => {
-            return [...prevValue, newNote]
-        });
+        saveNota(newNote);
     }
 
-    function deleteNotes(id: number) {
-        setNotes((preValue) => {
-          return [...preValue.filter((note, index) => index !== id)];
-        });
+    async function deleteNotes(id: string) {
+        try {
+            // Deleta a nota do Firestore
+            console.log(id)
+            await deleteDoc(doc(db, "notes", id));
+            // Remove a nota do estado local
+            setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
+          } catch (error) {
+            console.error("Erro ao deletar a nota:", error);
+          }
     }
 
     return (
@@ -30,7 +63,7 @@ export default function Notas() {
             <div className="grid grid-cols-1 sm:grid-cols-6 gap-4 mt-8 auto-rows-min">
                 {notes.map((note, index) => (
                     <Nota key={index} 
-                          id={index} 
+                          id={note.id!} 
                           title={note.title} 
                           content={note.content}
                           onDelete={deleteNotes}
