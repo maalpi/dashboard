@@ -43,7 +43,7 @@ function ColumnContainer(props: Props){
     }, [tasks])
 
     return (
-            <div className="w-[350px] h-[500px] max-h-[500px] rounded-md flex flex-col"
+            <div className="min-w-[270px] h-[500px] xl:h-[500px] sm:w-[1000px] md:w-[250px] xl:w-[350px] max-h-[600px] rounded-md flex flex-col"
                 ref={setNodeRef} 
                 style={style} 
                 >

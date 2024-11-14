@@ -10,7 +10,7 @@ import TaskCard from "../cards/TaskCard";
 import {arrayMove} from '@dnd-kit/sortable';
 import { FirestoreTasks } from "@/hooks/fireStoreTasks";
 import { db } from "@/db/firebase"; // Importe sua configuração do Firestore
-import { collection, query, where, getDocs, onSnapshot, doc } from "firebase/firestore";
+import { onSnapshot, doc } from "firebase/firestore";
 
 interface KanbanBoardProps {
     tabelaId: string | null;
@@ -180,7 +180,7 @@ function KanbanBoard({ tabelaId }: KanbanBoardProps) {
     return (
         <div className="m-auto flex min-h-[700px] w-full items-center justify-center overflow-x-auto overflow-y-hidden px-[40px]">
             <DndContext onDragStart={onDragStart} sensors={sensors} onDragEnd={onDragEnd} onDragOver={onDragOver}>
-                <div className="m-auto flex gap-4">
+                <div className="m-auto overflow-x-auto md:overflow-hidden xl:overflow-auto md:m-0 xl:m-auto flex gap-4">
                     <div className="flex gap-4">
                         {columns.map((col) => (
                             <ColumnContainer 
