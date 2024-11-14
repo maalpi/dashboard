@@ -174,8 +174,8 @@ export default function CalendarBoard() {
     };
 
     return (
-        <div className="grid grid-cols-8">
-            <div className="col-span-6">
+        <div className="sm:grid sm:grid-cols-8">
+            <div className="col-span-1 sm:col-span-7 xl:col-span-6">
                 <FullCalendar
                     locale={brLocale}
                     plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
@@ -187,6 +187,9 @@ export default function CalendarBoard() {
                     events={allEvents as EventSourceInput}
                     nowIndicator={true}
                     editable={true}
+                    // height={500}
+                    // contentHeight={200}
+                    aspectRatio={0.67}
                     droppable={true}
                     selectable={true}
                     selectMirror={true}
@@ -199,7 +202,7 @@ export default function CalendarBoard() {
                     eventClick={handleDeleteModal}
                 />
             </div>
-            <div id="draggable-el" className="ml-8 w-full border-2 p-2 rounded-md mt-16 lg:h-1/2 bg-violet-200">
+            <div id="draggable-el" className="ml-8 w-full hidden sm:block border-2 p-2 rounded-md mt-16 lg:h-1/2 bg-violet-200">
                 <h1 className="font-bold text-lg text-center">Drag event</h1>
                 {events.map((e) => (
                     <div
