@@ -56,7 +56,7 @@ export default function Home() {
         <h1 className="text-2xl mb-4 font-semibold">Kanban</h1>
         <KanbanDialog onKanbanCreated={fetchKanbanTables}/>
       </div>
-      <section className="grid grid-cols-2 sm:grid-cols-6 gap-4">
+      <section className="grid grid-cols-2 xl:grid-cols-6 md:grid-cols-3 gap-4">
         {kanbanTables.map((table) => (
         <Card 
             key={table.id} 

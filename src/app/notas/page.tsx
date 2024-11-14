@@ -60,7 +60,7 @@ export default function Notas() {
     return (
         <main className="flex min-h-screen flex-col items-center p-16">
             <CardNotas onAdd={addNote} />
-            <div className="grid grid-cols-1 sm:grid-cols-6 gap-4 mt-8 auto-rows-min">
+            <div className="grid grid-cols-1 xl:grid-cols-6 md:grid-cols-3 gap-4 mt-8 auto-rows-min">
                 {notes.map((note, index) => (
                     <Nota key={index} 
                           id={note.id!} 
