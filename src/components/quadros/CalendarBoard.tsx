@@ -121,6 +121,7 @@ export default function CalendarBoard() {
             allDay: data.allDay,
             id: new Date().getTime().toString(),
         };
+        
         console.log('salvando:',event.start )
         setAllEvents([...allEvents, event]);
         saveEvent(event); // Salva o novo evento no Firestore
@@ -155,18 +156,22 @@ export default function CalendarBoard() {
     };
 
     const updateEvent = async (eventId: string, updatedData: Partial<Event>) => {
+        console.log(updatedData.start);
         const eventRef = doc(db, 'events', eventId);
         await updateDoc(eventRef, updatedData);
     };
 
     const handleUpdate = async (eventId: string, newStart: string, allDay: boolean) => {
         try {
+
+            const isoStart = new Date(newStart);
+
             // Atualiza o evento no Firestore
-            await updateEvent(eventId, { start: newStart, allDay });
-    
+            await updateEvent(eventId, { start: isoStart, allDay });
+
             // Atualiza o estado local para refletir a mudança
             setAllEvents(allEvents.map(event =>
-                event.id === (eventId) ? { ...event, start: newStart, allDay } : event
+                event.id === (eventId) ? { ...event, start: isoStart, allDay } : event
             ));
         } catch (error) {
             console.error("Erro ao atualizar o evento:", error);
