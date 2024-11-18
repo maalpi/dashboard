@@ -44,14 +44,10 @@ export default function CalendarBoard() {
         id: '0',
     });
 
-    // Função para carregar os eventos do Firestore ao iniciar o componente
-    useEffect(() => {
-        const loadEvents = async () => {
-            const querySnapshot = await getDocs(collection(db, 'events'));
-            const loadedEvents = querySnapshot.docs.map((doc) => {
+    const loadEvents = async () => {
+        const querySnapshot = await getDocs(collection(db, 'events'));
+        const loadedEvents = querySnapshot.docs.map((doc) => {
                 const data = doc.data() as DocumentData;
-    
-                // Certifique-se de que os dados tenham todos os campos necessários
                 return {
                     id: doc.id || 0,
                     title: data.title || '',
@@ -59,17 +55,18 @@ export default function CalendarBoard() {
                     allDay: data.allDay || false,
                 } as Event;
             });
-            
-            console.log(loadedEvents)
             setAllEvents(loadedEvents);
-        };
-    
+    };
+
+    // useEffect para carregar os eventos quando entrar na pagina
+    useEffect(() => {
         loadEvents();
     }, []);
 
     // Função para salvar um evento no Firestore
     const saveEvent = async (event: Event) => {
         await addDoc(collection(db, 'events'), event);
+        
     };
 
     useEffect(() => {
@@ -101,7 +98,7 @@ export default function CalendarBoard() {
                 console.error("Erro ao deletar o evento do Firestore:", error);
             }
         }
-};
+    };
 
     const handleDateClick = (arg: { date: Date; allDay: boolean }) => {
         setNewEvent({
@@ -142,10 +139,18 @@ export default function CalendarBoard() {
         });
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setAllEvents([...allEvents, newEvent]);
-        saveEvent(newEvent); // Salva o evento criado no Firestore
+    
+        const eventToSave = { ...newEvent };
+    
+        try {
+            await saveEvent(eventToSave); // Salva o evento no Firestore
+            await loadEvents(); // Recarrega todos os eventos
+        } catch (error) {
+            console.error("Erro ao salvar o evento:", error);
+        }
+    
         setShowModal(false);
         setNewEvent({
             title: '',
