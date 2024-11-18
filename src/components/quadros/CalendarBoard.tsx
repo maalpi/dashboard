@@ -73,7 +73,6 @@ export default function CalendarBoard() {
         let draggableEl = document.getElementById('draggable-el');
 
         if (draggableEl) {
-            console.log('draggable ativado');
             new Draggable(draggableEl, {
                 itemSelector: '.fc-event',
                 eventData: function (eventEl) {
@@ -88,7 +87,6 @@ export default function CalendarBoard() {
 
     const handleDelete = async () => {
         if (idToDelete !== null) {
-            console.log("Tentando deletar o evento com ID:", idToDelete);
             try {
                 await deleteDoc(doc(db, 'events', idToDelete));
                 setAllEvents(allEvents.filter((event) => event.id !== idToDelete));
@@ -119,15 +117,11 @@ export default function CalendarBoard() {
             id: new Date().getTime().toString(),
         };
         
-        console.log('salvando:',event.start )
         setAllEvents([...allEvents, event]);
         saveEvent(event); // Salva o novo evento no Firestore
     };
 
     const handleDeleteModal = (data: { event: { id: string } }) => {
-        console.log(data.event.id);
-        console.log(data.event);
-
         setShowDeleteModal(true);
         setIdToDelete(data.event.id);
     };
@@ -161,7 +155,6 @@ export default function CalendarBoard() {
     };
 
     const updateEvent = async (eventId: string, updatedData: Partial<Event>) => {
-        console.log(updatedData.start);
         const eventRef = doc(db, 'events', eventId);
         await updateDoc(eventRef, updatedData);
     };
@@ -197,9 +190,6 @@ export default function CalendarBoard() {
                     events={allEvents as EventSourceInput}
                     nowIndicator={true}
                     editable={true}
-                    // height={500}
-                    // contentHeight={200}
-                    // aspectRatio={0.67}
                     droppable={true}
                     selectable={true}
                     selectMirror={true}
