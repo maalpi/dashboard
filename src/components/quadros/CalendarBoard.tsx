@@ -25,24 +25,43 @@ interface Event {
 }
 
 export default function CalendarBoard() {
-    const events = [
-        { title: 'sair', id: '2' },
-        { title: 'aula', id: '3' },
-        { title: 'correr', id: '4' },
-        { title: 'estudar', id: '5' },
-        { title: 'academia', id: '1' },
-    ];
-
+    // estados
     const [allEvents, setAllEvents] = useState<Event[]>([]);
     const [showModal, setShowModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [idToDelete, setIdToDelete] = useState<string | null>(null);
-    const [newEvent, setNewEvent] = useState<Event>({
-        title: '',
-        start: '',
-        allDay: false,
-        id: '0',
-    });
+    const [newEvent, setNewEvent] = useState<Event>({ title: '', start: '', allDay: false, id: '0' });
+
+    // carregando ao inicializar componente
+    useEffect(() => {
+        loadEvents();
+    }, []);
+
+    // garantindo que o draggable só seja configurado uma vez
+    useEffect(() => {
+        const draggableEl = document.getElementById('draggable-el');
+        if (draggableEl && !draggableEl.classList.contains('draggable-initialized')) {
+          new Draggable(draggableEl, {
+            itemSelector: '.fc-event',
+            eventData: (eventEl) => ({
+              title: eventEl.getAttribute('title') || '',
+              id: eventEl.getAttribute('data') || '',
+            }),
+          });
+          draggableEl.classList.add('draggable-initialized');
+        }
+      }, []);
+
+
+    /*  Função para salvar um evento no Firestore; Carregar 
+        os eventos nas paginas sempre que tiver alguma mudança
+        no banco de dados; Função para adicionar o evento puxado
+        da lista fixa e função para update do evento.
+    */
+    const saveEvent = async (event: Event) => {
+        await addDoc(collection(db, 'events'), event);
+        
+    };
 
     const loadEvents = async () => {
         const querySnapshot = await getDocs(collection(db, 'events'));
@@ -58,60 +77,6 @@ export default function CalendarBoard() {
             setAllEvents(loadedEvents);
     };
 
-    // useEffect para carregar os eventos quando entrar na pagina
-    useEffect(() => {
-        loadEvents();
-    }, []);
-
-    // Função para salvar um evento no Firestore
-    const saveEvent = async (event: Event) => {
-        await addDoc(collection(db, 'events'), event);
-        
-    };
-
-    useEffect(() => {
-        let draggableEl = document.getElementById('draggable-el');
-        
-        // garantindo que o draggable só seja configurado uma vez
-        if (draggableEl && !draggableEl.classList.contains('draggable-initialized')) {
-            new Draggable(draggableEl, {
-                itemSelector: '.fc-event',
-                eventData: function (eventEl) {
-                    let title = eventEl.getAttribute('title');
-                    let id = eventEl.getAttribute('data');
-                    let start = eventEl.getAttribute('start');
-                    return { title, id, start };
-                },
-            });
-            draggableEl.classList.add('draggable-initialized'); // Marca como inicializado
-        }
-    }, []);
-
-    const handleDelete = async () => {
-        if (idToDelete !== null) {
-            try {
-                await deleteDoc(doc(db, 'events', idToDelete));
-                setAllEvents(allEvents.filter((event) => event.id !== idToDelete));
-                setShowDeleteModal(false);
-                setIdToDelete(null);
-            } catch (error) {
-                console.error("Erro ao deletar o evento do Firestore:", error);
-            }
-        }
-    };
-
-    const handleDateClick = (arg: { date: Date; allDay: boolean }) => {
-        setNewEvent({
-            ...newEvent,
-            start: arg.date,
-            allDay: arg.allDay,
-            id: new Date().getTime().toString(),
-        });
-        setShowModal(true);
-    };
-
-
-    // Função para adicionar o evento puxado da lista
     const addEvent = async (data: DropArg) => {
         try {
             const event = {
@@ -129,9 +94,23 @@ export default function CalendarBoard() {
         }
     };
 
-    const handleDeleteModal = (data: { event: { id: string } }) => {
-        setShowDeleteModal(true);
-        setIdToDelete(data.event.id);
+    const updateEvent = async (eventId: string, updatedData: Partial<Event>) => {
+        const eventRef = doc(db, 'events', eventId);
+        await updateDoc(eventRef, updatedData);
+    };
+
+    // Handlers de Evento
+    const handleDelete = async () => {
+        if (idToDelete !== null) {
+            try {
+                await deleteDoc(doc(db, 'events', idToDelete));
+                setAllEvents(allEvents.filter((event) => event.id !== idToDelete));
+                setShowDeleteModal(false);
+                setIdToDelete(null);
+            } catch (error) {
+                console.error("Erro ao deletar o evento do Firestore:", error);
+            }
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -161,11 +140,6 @@ export default function CalendarBoard() {
         });
     };
 
-    const updateEvent = async (eventId: string, updatedData: Partial<Event>) => {
-        const eventRef = doc(db, 'events', eventId);
-        await updateDoc(eventRef, updatedData);
-    };
-
     const handleUpdate = async (eventId: string, newStart: string, allDay: boolean) => {
         try {
 
@@ -180,6 +154,22 @@ export default function CalendarBoard() {
         } catch (error) {
             console.error("Erro ao atualizar o evento:", error);
         }
+    };
+
+    // Modal Handlers
+    const handleDateClick = (arg: { date: Date; allDay: boolean }) => {
+        setNewEvent({
+            ...newEvent,
+            start: arg.date,
+            allDay: arg.allDay,
+            id: new Date().getTime().toString(),
+        });
+        setShowModal(true);
+    };
+
+    const handleDeleteModal = (data: { event: { id: string } }) => {
+        setShowDeleteModal(true);
+        setIdToDelete(data.event.id);
     };
 
     return (
