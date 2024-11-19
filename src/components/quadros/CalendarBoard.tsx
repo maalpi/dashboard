@@ -71,9 +71,9 @@ export default function CalendarBoard() {
 
     useEffect(() => {
         let draggableEl = document.getElementById('draggable-el');
-
-        if (draggableEl) {
-            console.log('puxando')
+        
+        // garantindo que o draggable só seja configurado uma vez
+        if (draggableEl && !draggableEl.classList.contains('draggable-initialized')) {
             new Draggable(draggableEl, {
                 itemSelector: '.fc-event',
                 eventData: function (eventEl) {
@@ -83,6 +83,7 @@ export default function CalendarBoard() {
                     return { title, id, start };
                 },
             });
+            draggableEl.classList.add('draggable-initialized'); // Marca como inicializado
         }
     }, []);
 
