@@ -208,16 +208,19 @@ export default function CalendarBoard() {
                     eventClick={handleDeleteModal}
                 />
             </div>
-            <div id="draggable-el" className="ml-8 w-full hidden sm:block border-2 p-2 rounded-md mt-16 lg:h-1/2 bg-violet-200">
+             <div
+                id="draggable-el"
+                className="ml-8 hidden sm:block border-2 p-2 rounded-md mt-16 lg:h-1/2 bg-violet-200"
+            >
                 <h1 className="font-bold text-lg text-center">Drag event</h1>
-                {events.map((e) => (
-                    <div
-                        key={e.id}
-                        className="fc-event border-2 p-1 m-2 w-full cursor-grab rounded-md ml-auto text-center bg-white text-violet-700"
-                        title={e.title}
-                    >
-                        {e.title}
-                    </div>
+                {['sair', 'aula', 'correr', 'estudar', 'academia'].map((title, id) => (
+                <div
+                    key={id}
+                    className="fc-event border-2 p-1 m-2 rounded-md cursor-grab text-center bg-white text-violet-700"
+                    title={title}
+                >
+                    {title}
+                </div>
                 ))}
             </div>
 
