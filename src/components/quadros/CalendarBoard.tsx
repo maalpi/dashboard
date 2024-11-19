@@ -26,11 +26,11 @@ interface Event {
 
 export default function CalendarBoard() {
     const events = [
-        { title: 'event 1', id: '1' },
-        { title: 'event 2', id: '2' },
-        { title: 'event 3', id: '3' },
-        { title: 'event 4', id: '4' },
-        { title: 'event 5', id: '5' },
+        { title: 'sair', id: '2' },
+        { title: 'aula', id: '3' },
+        { title: 'correr', id: '4' },
+        { title: 'estudar', id: '5' },
+        { title: 'academia', id: '1' },
     ];
 
     const [allEvents, setAllEvents] = useState<Event[]>([]);
@@ -73,6 +73,7 @@ export default function CalendarBoard() {
         let draggableEl = document.getElementById('draggable-el');
 
         if (draggableEl) {
+            console.log('puxando')
             new Draggable(draggableEl, {
                 itemSelector: '.fc-event',
                 eventData: function (eventEl) {
@@ -108,17 +109,23 @@ export default function CalendarBoard() {
         setShowModal(true);
     };
 
-    const addEvent = (data: DropArg) => {
-        const event = {
-            ...newEvent,
-            start: data.date.toISOString(),
-            title: data.draggedEl.innerText,
-            allDay: data.allDay,
-            id: new Date().getTime().toString(),
-        };
-        
-        setAllEvents([...allEvents, event]);
-        saveEvent(event); // Salva o novo evento no Firestore
+
+    // Função para adicionar o evento puxado da lista
+    const addEvent = async (data: DropArg) => {
+        try {
+            const event = {
+                ...newEvent,
+                start: new Date(data.date),
+                title: data.draggedEl.innerText,
+                allDay: data.allDay,
+                id: new Date().getTime().toString(),
+            };
+
+            await saveEvent(event); // Salva no Firestore
+            loadEvents();
+        } catch (error) {
+            console.error("Erro ao salvar o evento:", error);
+        }
     };
 
     const handleDeleteModal = (data: { event: { id: string } }) => {
@@ -135,7 +142,6 @@ export default function CalendarBoard() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-    
         const eventToSave = { ...newEvent };
     
         try {
@@ -163,7 +169,6 @@ export default function CalendarBoard() {
         try {
 
             const isoStart = new Date(newStart);
-
             // Atualiza o evento no Firestore
             await updateEvent(eventId, { start: isoStart, allDay });
 
