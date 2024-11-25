@@ -12,6 +12,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "hsl(var(--chart-1))",
+  },
+} satisfies ChartConfig
+
 function App() {
   const [activities, setActivities] = useState([]); // Todas as atividades
   const [runCount, setRunCount] = useState(0); // Número de corridas
@@ -57,16 +71,16 @@ function App() {
         const date = new Date();
         date.setDate(now.getDate() - i);
         return {
-          date: date.toISOString().split('T')[0], // Formato YYYY-MM-DD
-          distance: 0,
+          date: date.toLocaleDateString("pt-BR", { weekday: "long" }), // Formato YYYY-MM-DD
+          distancia: 0,
         };
       });
 
       filteredActivities.forEach((activity) => {
-        const activityDate = activity.start_date.split('T')[0];
+        const activityDate = new Date(activity.start_date).toLocaleDateString("pt-BR", { weekday: "long" });
         const day = days.find((d) => d.date === activityDate);
         if (day) {
-          day.distance += activity.distance; // Somar a distância do dia
+          day.distancia = ((day.distancia + activity.distance) / 1000).toFixed(2);; // Somar a distância do dia
         }
       });
 
@@ -99,7 +113,7 @@ function App() {
       <div>
         <h1>Atividades</h1>
         <p>Número de corridas nos últimos 7 dias: {runCount}</p>
-        <p>Distância total percorrida: {totalDistance} metros</p>
+        <p>Distância total percorrida: {totalDistance} quilometros</p>
         <ul>
           {activities.map((activity) => (
             <li key={activity.id}>
@@ -109,47 +123,45 @@ function App() {
         </ul>
       </div>
 
-      <Card>
+      <Card className='w-2/6'>
         <CardHeader>
           <CardTitle>Distância Percorrida (Últimos 7 Dias)</CardTitle>
-          <CardDescription>Distância diária em metros</CardDescription>
+          <CardDescription>Distância diária em quilômetro</CardDescription>
         </CardHeader>
         <CardContent>
+        <ChartContainer config={chartConfig}>
           <AreaChart
-            width={600}
-            height={300}
+            accessibilityLayer
             data={chartData}
             margin={{
               top: 10,
-              right: 30,
-              left: 0,
+              right: 12,
+              left: 12,
               bottom: 0,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="start_date" />
-            <YAxis />
-            <Tooltip />
+            <CartesianGrid vertical={true} />
+            <YAxis tickFormatter={(value) => `${value} km`}/>
+            <XAxis dataKey="date" 
+                   tickLine={false}
+                   axisLine={false}
+                    tickMargin={8}
+                    tickFormatter={(value) => value.slice(0, 3)}/>
+                    
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="dashed"/>}
+            />
             <Area
               type="monotone"
-              dataKey="distance"
-              stroke="#8884d8"
-              fill="#8884d8"
+              dataKey="distancia"
+              fill="var(--color-desktop)"
+              fillOpacity={0.4}
+              stroke="var(--color-desktop)"
             />
           </AreaChart>
+          </ChartContainer>
         </CardContent>
-        <CardFooter>
-          <div className="flex w-full items-start gap-2 text-sm">
-            <div className="grid gap-2">
-              <div className="flex items-center gap-2 font-medium leading-none">
-                Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-              </div>
-              <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                Últimos 7 dias
-              </div>
-            </div>
-          </div>
-        </CardFooter>
       </Card>
     </main>
   );
