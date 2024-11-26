@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils"
 
 import { Sidebar } from "@/components/sidebar";
 import { ThemeProvider } from "@/providers/ThemeProvider";
+import { Providers } from "@/providers/TanstackProvider";
+
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -35,7 +37,9 @@ export default function RootLayout({
             disableTransitionOnChange
           >
           <Sidebar/>
-          {children}
+          <Providers>
+            {children}
+          </Providers>
         </ThemeProvider>
       </body>
     </html>
