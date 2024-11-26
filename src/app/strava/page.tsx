@@ -47,7 +47,7 @@ function App() {
       }
 
       const data = await response.json();
-
+      console.log(data)
       // Filtrar apenas as atividades do tipo "Run" nos últimos 7 dias
       const now = new Date();
       const sevenDaysAgo = new Date();
