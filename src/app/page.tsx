@@ -1,3 +1,4 @@
+import { Atividades } from '@/components/charts/atividadesLastMonth';
 import StravaRun7days from '@/components/charts/runChartSevenDays';
 import PomodoroComponent from '@/components/telaInicial/cards/pomodoro';
 import ToDoComponent from "@/components/telaInicial/cards/toDoList";
@@ -10,6 +11,7 @@ export default function Home() {
           <ToDoComponent/>
           <PomodoroComponent/> 
           <StravaRun7days />
+          <Atividades/>
         </section>
 
     </main>

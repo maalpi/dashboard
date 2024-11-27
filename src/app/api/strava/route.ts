@@ -6,13 +6,14 @@ export async function GET() {
 
   const clientID = process.env.CLIENT_ID_STRAVA as string;
   const clientSecret = process.env.CLIENT_SECRET_STRAVA as string;
-  const refreshToken = process.env.REFRESH_TOKEN_STRAVA as string;
+  let refreshToken = process.env.REFRESH_TOKEN_STRAVA as string;
 
   try {
+    // Atualiza o token se necessário
     const accessToken = await refreshAccessToken(clientID, clientSecret, refreshToken);
 
     const response = await fetch(activitiesURL, {
-      method: 'GET',
+      method: "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -34,12 +35,12 @@ async function refreshAccessToken(clientID: string, clientSecret: string, refres
   const tokenURL = "https://www.strava.com/oauth/token";
 
   const response = await fetch(tokenURL, {
-    method: 'POST',
+    method: "POST",
     body: new URLSearchParams({
       client_id: clientID,
       client_secret: clientSecret,
       refresh_token: refreshToken,
-      grant_type: 'refresh_token',
+      grant_type: "refresh_token",
     }),
   });
 
@@ -49,7 +50,7 @@ async function refreshAccessToken(clientID: string, clientSecret: string, refres
     throw new Error(`Erro ao atualizar token: ${data.message || response.statusText}`);
   }
 
-  // Atualiza o arquivo .env localmente com o novo refresh_token, se necessário
+  // Atualiza o arquivo .env.local com o novo refresh_token, se necessário
   if (data.refresh_token) {
     updateEnvVariable("REFRESH_TOKEN_STRAVA", data.refresh_token);
   }
@@ -58,7 +59,6 @@ async function refreshAccessToken(clientID: string, clientSecret: string, refres
 }
 
 function updateEnvVariable(key: string, value: string) {
-  console.log(value)
   const envPath = path.resolve(process.cwd(), ".env.local");
   const envContent = fs.readFileSync(envPath, "utf-8");
 
