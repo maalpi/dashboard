@@ -24,28 +24,36 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function Atividades() {
+export function KmAtividades() {
   const { data, isLoading, error } = useStravaData();
 
   // Obtendo a data atual e subtraindo 30 dias
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-  // Filtrando atividades dos últimos 30 dias
-  const recentActivitiesCount = data
-    ? data.filter((activity: any) => new Date(activity.start_date) > thirtyDaysAgo).length
+    const kmLastMonth = data
+    ? data.filter((activity: any) => new Date(activity.start_date) > thirtyDaysAgo)
     : 0;
+
+    let cont = 0
+    for (let i = 0; i < kmLastMonth.length; i++) {
+        cont += kmLastMonth[i].distance;
+    }
+
+    cont = (cont / 1000).toFixed(2);
+    console.log(cont);
+
 
   // Dados para o gráfico
   const chartData = [
-    { name: "Activities", value: recentActivitiesCount, fill: "hsl(var(--chart-2))" },
+    { name: "Activities", value: cont, fill: "hsl(var(--chart-2))" },
     { name: "Limit", value: 30, opacity: 0 }, // Cor de fundo para o limite
   ];
 
   return (
     <Card className="flex flex-col border-none">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Número de atividades</CardTitle>
+        <CardTitle>Distância percorrida</CardTitle>
         <CardDescription>Últimos 30 dias</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
@@ -92,16 +100,16 @@ export function Atividades() {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-4xl font-bold"
+                          className="fill-foreground text-3xl font-bold"
                         >
-                          {recentActivitiesCount}
+                          {cont}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Atividades
+                          Quilômetros
                         </tspan>
                       </text>
                     );
