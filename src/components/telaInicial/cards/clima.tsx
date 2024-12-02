@@ -40,6 +40,7 @@ export default function ClimaComponent() {
             temperatureMax: data.timelines.daily[0].values.temperatureMax,
             temperatureMin: data.timelines.daily[0].values.temperatureMin,
             temperatureAvg: data.timelines.daily[0].values.temperatureAvg,
+            cloudCover: data.timelines.daily[0].values.cloudCoverAvg,
             precipitationProbability: data.timelines.daily[0].values.precipitationProbabilityAvg,
         },
         forecast: data.timelines.daily.slice(1).map(day => ({
@@ -72,7 +73,13 @@ export default function ClimaComponent() {
                                 <p className="text-sm">min: {filteredData?.today.temperatureMin}°C</p>
                             </div>
                         </div>
-                        <Sun className="w-32 h-32"/>
+                        {filteredData?.today.cloudCover > 75 ? (
+                            <CloudHail className="w-32 h-32 text-blue-500"/>
+                            ) : filteredData?.today.cloudCover > 40 ? (
+                            <CloudSun className="w-32 h-32"/>
+                            ) : (
+                            <Sun className="w-32 h-32"/>
+                        )}
                     </div>
                 </div>
                 <h3 className='mt-4 text-lg font-semibold'>Previsão</h3>
