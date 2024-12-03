@@ -3,6 +3,7 @@ import { KmAtividades } from "../charts/kmPercorridoLastMonth"
 import {
     Card,
   } from "@/components/ui/card";
+import { Pace } from "../charts/melhorPaceLastMonth";
 
 function StravaBoard(){
     return (
@@ -10,7 +11,7 @@ function StravaBoard(){
             <Card className="grid grid-cols-1 sm:grid-cols-2 w-full">
                 <KmAtividades/>
                 <Atividades />
-                <Atividades />
+                <Pace />
                 <Atividades />
                 </Card>
 
