@@ -3,45 +3,30 @@
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useWeatherData } from "@/hooks/useWeatherData";
+import { useWeatherDataRealTime } from "@/hooks/useWeatherRealTime";
 
 import { Sun, CloudSun, CloudHail } from "lucide-react";
 
-interface WeatherData {
-    timelines: {
-        daily: Array<{
-            time: string;
-            values: {
-                temperatureMax: number;
-                temperatureMin: number;
-                temperatureAvg: number;
-                precipitationProbabilityAvg: number;
-            };
-        }>;
-    };
-    location: {
-        lat: number;
-        lon: number;
-        name: string;
-    };
-}
+
 
 export default function ClimaComponent() {
     const { data, isLoading, error } = useWeatherData();
+    const {  data: dataRealTime } = useWeatherDataRealTime();
 
     if (isLoading) return <p>Carregando...</p>;
     if (error) return <p>Erro: {error.message}</p>;
-
+    
     // Filtrando os dados relevantes
-    const filteredData = data && {
+    const filteredData = data && dataRealTime && {
         city: data.location.name,
         lat: data.location.lat,
         lon: data.location.lon,
         today: {
             temperatureMax: data.timelines.daily[0].values.temperatureMax,
             temperatureMin: data.timelines.daily[0].values.temperatureMin,
-            temperatureAvg: data.timelines.daily[0].values.temperatureAvg,
-            cloudCover: data.timelines.daily[0].values.cloudCoverAvg,
-            precipitationProbability: data.timelines.daily[0].values.precipitationProbabilityAvg,
+            temperatureAvg: dataRealTime.data.values.temperature,
+            cloudCover: dataRealTime.data.values.cloudCover,
+            precipitationProbability: dataRealTime.data.values.precipitationProbability,
         },
         forecast: data.timelines.daily.slice(1).map(day => ({
             time: day.time,
