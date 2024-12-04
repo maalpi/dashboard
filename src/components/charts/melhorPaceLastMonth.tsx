@@ -28,7 +28,7 @@ export function Pace() {
   if (recentActivities.length > 0) {
     for (const activity of recentActivities) {
       const pace = parseFloat((((activity.moving_time/60) / activity.distance)*1000).toFixed(2));
-      if (bestPace === null || pace < bestPace) {
+      if ((bestPace === null || pace < bestPace) && activity.type === 'Run') {
         bestPace = pace;
         km = (activity.distance/1000).toFixed(2);
       }
