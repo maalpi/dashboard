@@ -106,9 +106,9 @@ export default function ToDoComponent() {
                             <button
                               id={index}
                               onClick={() => handleDelete(index)}
-                              className="w-4 h-4 m-2.5 rounded-2xl bg-red-700 text-gray-200 shadow-md justify-center hover:bg-red-500 hover:scale-105"
+                              className="w-4 h-4 m-2.5 rounded-2xl flex items-center bg-red-700 text-gray-200 shadow-md justify-center hover:bg-red-500 hover:scale-105"
                             >
-                              x
+                              <span className="p-1 mb-1">x</span>
                             </button>
                           </li>
                         </div>
