@@ -24,8 +24,7 @@ export function AtivLonga() {
 
   // Calculando o melhor pace
   let bestPace: number | null = null;
-  let km: string  = 'null'
-  let atividadeLonga: number | null = null
+  let atividadeLonga: number  = 0
   console.log(recentActivities)
   if (recentActivities.length > 0) {
     for (const activity of recentActivities) {
