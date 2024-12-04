@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export function Pace() {
+export function AtivLonga() {
   const { data, isLoading, error } = useStravaData();
 
   // Obtendo a data atual e subtraindo 30 dias

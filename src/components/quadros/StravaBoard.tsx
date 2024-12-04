@@ -4,6 +4,7 @@ import {
     Card,
   } from "@/components/ui/card";
 import { Pace } from "../charts/melhorPaceLastMonth";
+import { AtivLonga } from "../charts/atividMaisLonga";
 
 function StravaBoard(){
     return (
@@ -12,7 +13,7 @@ function StravaBoard(){
                 <KmAtividades/>
                 <Atividades />
                 <Pace />
-                <Atividades />
+                <AtivLonga />
                 </Card>
 
     )
