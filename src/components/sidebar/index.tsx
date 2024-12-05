@@ -4,7 +4,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { Home, PanelBottom, Calendar, Settings2, Kanban, NotepadText } from "lucide-react"
+import { Home, PanelBottom, Calendar, Settings2, Kanban, NotepadText, Activity } from "lucide-react"
 import Link from "next/link"
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "../ui/tooltip"
 import DarkLightToggle from "../switch/theme"
@@ -83,15 +83,15 @@ export function Sidebar() {
 
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <Link href='#'
+                                <Link href='/atividades'
                                     className="flex h-9 w-9 shrink-0 items-center justify-center 
                                     rounded-lg text-muted-foreground transition-colors hover:text-foreground"
                                 >
-                                    <Settings2 className="h-5 w-5"/>
-                                    <span className="sr-only">Configurações</span>
+                                    <Activity className="h-5 w-5"/>
+                                    <span className="sr-only">Atividades</span>
                                 </Link>
                             </TooltipTrigger>
-                            <TooltipContent side='right'>Configurações</TooltipContent>
+                            <TooltipContent side='right'>Atividades</TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
                 </nav>
