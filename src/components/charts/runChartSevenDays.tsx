@@ -38,25 +38,27 @@ function StravaRun7days() {
     );
   });
 
-  // const runCount = filteredActivities.length;
-  // const totalDistance = filteredActivities.reduce((sum, activity) => sum + activity.distance, 0);
-
-  const days = Array.from({ length: 7 }, (_, i) => {
+  const days = Array.from({ length: 8 }, (_, i) => {
     const date = new Date();
     date.setDate(now.getDate() - i);
     return {
       date: date.toLocaleDateString("pt-BR", { weekday: "long" }),
       distancia: 0,
+      dia: date.toLocaleDateString("pt-BR"),
     };
   });
 
+  
+
   filteredActivities.forEach((activity) => {
-    const activityDate = new Date(activity.start_date).toLocaleDateString("pt-BR", { weekday: "long" });
-    const day = days.find((d) => d.date === activityDate);
+    const activityDate = new Date(activity.start_date).toLocaleDateString("pt-BR");
+    const day = days.find((d) => d.dia === activityDate);
     if (day) {
-      day.distancia = ((day.distancia + activity.distance) / 1000).toFixed(2);
+      day.distancia = parseFloat(((day.distancia + activity.distance) / 1000).toFixed(2));
     }
   });
+
+  console.log(days)
 
   const chartData = days.reverse();
 
