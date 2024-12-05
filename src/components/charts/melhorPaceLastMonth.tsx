@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Activity } from "@/interfaces/Strava";
 
 export function Pace() {
   const { data, isLoading, error } = useStravaData();
@@ -19,7 +20,7 @@ export function Pace() {
 
   // Filtrando atividades dos últimos 30 dias
   const recentActivities = data
-    ? data.filter((activity: any) => new Date(activity.start_date) > thirtyDaysAgo)
+    ? data.filter((activity: Activity) => new Date(activity.start_date) > thirtyDaysAgo)
     : [];
 
   // Calculando o melhor pace

@@ -16,6 +16,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
+import { Activity } from "@/interfaces/Strava";
 
 // Configuração inicial do gráfico
 const chartConfig = {
@@ -25,14 +26,14 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function KmAtividades() {
-  const { data, isLoading, error } = useStravaData();
+  const { data, isLoading } = useStravaData();
 
   // Obtendo a data atual e subtraindo 30 dias
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
     const kmLastMonth = data
-    ? data.filter((activity: any) => new Date(activity.start_date) > thirtyDaysAgo)
+    ? data.filter((activity: Activity) => new Date(activity.start_date) > thirtyDaysAgo)
     : 0;
 
     let cont = 0
@@ -40,8 +41,7 @@ export function KmAtividades() {
         cont += kmLastMonth[i].distance;
     }
 
-    cont = (cont / 1000).toFixed(2);
-    console.log(cont);
+    cont = parseFloat((cont / 1000).toFixed(2));
 
 
   // Dados para o gráfico

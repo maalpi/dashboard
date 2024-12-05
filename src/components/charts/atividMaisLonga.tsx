@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Activity } from "@/interfaces/Strava";
 
 export function AtivLonga() {
   const { data, isLoading, error } = useStravaData();
@@ -19,13 +20,13 @@ export function AtivLonga() {
 
   // Filtrando atividades dos últimos 30 dias
   const recentActivities = data
-    ? data.filter((activity: any) => new Date(activity.start_date) > thirtyDaysAgo)
+    ? data.filter((activity: Activity) => new Date(activity.start_date) > thirtyDaysAgo)
     : [];
 
   // Calculando o melhor pace
   let bestPace: number | null = null;
   let atividadeLonga: number  = 0
-  console.log(recentActivities)
+
   if (recentActivities.length > 0) {
     for (const activity of recentActivities) {
       const pace = parseFloat((((activity.moving_time/60) / activity.distance)*1000).toFixed(2));

@@ -5,6 +5,7 @@ import { useStravaData } from "@/hooks/useStravaData";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { Activity } from "@/interfaces/Strava";
 
 const chartConfig = {
   desktop: {
@@ -29,7 +30,7 @@ function StravaRun7days() {
   const sevenDaysAgo = new Date();
   sevenDaysAgo.setDate(now.getDate() - 7);
 
-  const filteredActivities = data.filter((activity) => {
+  const filteredActivities = data.filter((activity: Activity) => {
     const activityDate = new Date(activity.start_date);
     return (
       activity.type === "Run" &&
@@ -50,15 +51,13 @@ function StravaRun7days() {
 
   
 
-  filteredActivities.forEach((activity) => {
+  filteredActivities.forEach((activity: Activity) => {
     const activityDate = new Date(activity.start_date).toLocaleDateString("pt-BR");
     const day = days.find((d) => d.dia === activityDate);
     if (day) {
       day.distancia = parseFloat(((day.distancia + activity.distance) / 1000).toFixed(2));
     }
   });
-
-  console.log(days)
 
   const chartData = days.reverse();
 
