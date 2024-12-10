@@ -45,7 +45,7 @@ export function Elevacao() {
 
   return (
     <Card
-      className="border-none shadow-md flex flex-col" // adicionando `self-start`
+      className=" shadow-md flex flex-col" // adicionando `self-start`
     >
       <CardHeader className="items-center">
           <CardTitle>Ganho de elevação</CardTitle>

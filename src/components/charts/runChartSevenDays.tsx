@@ -62,7 +62,7 @@ function StravaRun7days() {
   const chartData = days.reverse();
 
   return (
-    <Card className="w-full">
+    <Card className="w-full shadow-md">
       <CardHeader>
         <CardTitle>Distância Percorrida (Últimos 7 Dias)</CardTitle>
         <CardDescription>Distância diária em quilômetro</CardDescription>
