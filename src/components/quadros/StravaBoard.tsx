@@ -8,14 +8,12 @@ import { AtivLonga } from "../charts/atividMaisLonga";
 
 function StravaBoard(){
     return (
-        
             <Card className="grid grid-cols-1 sm:grid-cols-2 w-full">
                 <KmAtividades/>
                 <Atividades />
                 <Pace />
                 <AtivLonga />
-                </Card>
-
+            </Card>
     )
 }
 
