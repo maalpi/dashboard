@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 
 
 interface KanbanDialogProps {

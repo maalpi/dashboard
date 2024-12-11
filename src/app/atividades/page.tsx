@@ -1,6 +1,6 @@
-import { Elevacao } from '@/components/cards/elevacaoGanho';
-import StravaRun7days from '@/components/charts/runChartSevenDays';
-import StravaBoard from '@/components/quadros/StravaBoard';
+import { Elevacao } from '@/components/atividades/cards/elevacaoGanho';
+import StravaRun7days from '@/components/atividades/charts/runChartSevenDays';
+import StravaBoard from '@/components/atividades/quadros/StravaBoard';
 
 export default function Home() {
 

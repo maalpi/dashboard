@@ -1,7 +1,7 @@
 'use client'
 
-import { CardNotas } from "@/components/cards/createNotasCard";
-import { Nota } from "@/components/cards/notesCard";
+import { CardNotas } from "@/components/notas/cards/createNotasCard";
+import { Nota } from "@/components/notas/cards/notesCard";
 import { useEffect, useState } from "react";
 
 import { db } from "@/db/firebase"; // Importar o db do seu Firebase

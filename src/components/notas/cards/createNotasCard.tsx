@@ -6,9 +6,9 @@ import {
 } from "@/components/ui/card"
 
 import { Input } from "@/components/ui/input"
-import { Textarea } from "../ui/textarea"
+import { Textarea } from "../../ui/textarea"
 import { useEffect, useRef, useState } from 'react';
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 interface CardNotasProps {
   onAdd: (nota: { title: string; content: string }) => void;

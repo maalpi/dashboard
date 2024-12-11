@@ -1,6 +1,6 @@
 'use client'
 
-import KanbanBoard from "@/components/quadros/KanbanBoard";
+import KanbanBoard from "@/components/kanban/quadros/KanbanBoard";
 import { useEffect, useState } from "react";
 import { db } from "@/db/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";

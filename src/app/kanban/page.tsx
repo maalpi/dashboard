@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
-import { KanbanDialog } from "@/components/dialog/kanbanDialog";
+import { KanbanDialog } from "@/components/kanban/dialog/kanbanDialog";
 import { db } from "@/db/firebase"; // Importar o db do seu Firebase
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";

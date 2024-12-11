@@ -1,5 +1,5 @@
 // Calendario.tsx
-import CalendarBoard from "@/components/quadros/CalendarBoard";
+import CalendarBoard from "@/components/calendario/quadros/CalendarBoard";
 
 export default function Calendario() {
     return (

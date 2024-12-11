@@ -1,4 +1,4 @@
-import StravaBoard from '@/components/quadros/StravaBoard';
+import StravaBoard from '@/components/atividades/quadros/StravaBoard';
 import ClimaComponent from '@/components/telaInicial/cards/clima';
 import PomodoroComponent from '@/components/telaInicial/cards/pomodoro';
 import ToDoComponent from "@/components/telaInicial/cards/toDoList";

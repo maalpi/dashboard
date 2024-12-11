@@ -4,7 +4,7 @@ import {
     CardContent,
 } from "@/components/ui/card";
 
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "../../ui/textarea";
 import { Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { Id } from "@/interfaces/Column";
@@ -20,7 +20,7 @@ interface Props {
 export default function TaskCard({ task, deleteTask, updateTask }: Props) {
     const [mouseIsOver, setMouseIsOver] = useState(false);
     const [editMode, setEditMode] = useState(false);
-    const [localContent, setLocalContent] = useState(task.content); // Estado local para armazenar o conteúdo
+    const [localContent, setLocalContent] = useState(task.content); 
 
     const {
         setNodeRef,

@@ -13,8 +13,8 @@ import { db } from '@/db/firebase';
 import { collection, addDoc, getDocs, DocumentData, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 
 import { EventSourceInput } from '@fullcalendar/core';
-import { CriaEventoDialog } from '@/components/dialog/criaEventoCalendarioDialog';
-import { ApagaEventoDialog } from '@/components/dialog/apagaEventoCalendarioDialogo';
+import { CriaEventoDialog } from '@/components/calendario/dialog/criaEventoCalendarioDialog';
+import { ApagaEventoDialog } from '@/components/calendario/dialog/apagaEventoCalendarioDialogo';
 
 
 interface Event {
