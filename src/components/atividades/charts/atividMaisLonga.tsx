@@ -51,7 +51,7 @@ export function AtivLonga() {
         ) : error ? (
           <span>Erro ao carregar dados.</span>
         ) : bestPace !== null ? (
-          <div className="flex flex-col items-center justify-center rounded-full xl:h-32 xl:w-32 h-32 w-32 max-w-[150px] xl:-mt-3 mt-3 border-dashed  border-sky-500 border-2">
+          <div className="flex flex-col items-center justify-center rounded-full xl:h-32 xl:w-32 h-32 w-32 max-w-[150px] xl:-mt-3 mt-3 border-dashed  border-[#6cb390] border-2">
             <span className="text-xl font-bold">{(atividadeLonga / 1000).toFixed(2).replace('.',',')} <span className="text-base font-bold mt-1">km</span></span>
             <span className="text-xl font-bold mt-1">{(bestPace.toFixed(2)).replace('.',':')} <span className="text-base font-bold mt-1">/km</span></span>
             

@@ -11,7 +11,7 @@ import { Activity } from "@/interfaces/Strava";
 import { useStravaData } from "@/hooks/useStravaData";
 
 export function Elevacao() {
-    const { data, isLoading } = useStravaData();
+    const { data } = useStravaData();
 
     // Obtendo a data atual e subtraindo 30 dias
     const thirtyDaysAgo = new Date();
@@ -54,9 +54,9 @@ export function Elevacao() {
         </CardDescription>
       </CardHeader>
       <CardContent className="items-center flex flex-col">
-        <p>No total: {cont} metros</p>
-        <p>corridas ({run} atv): {gainElevRun} metros</p>
-        <p>ciclismo ({mountainBike} atv): {gainElevBike} metros</p>
+        <p><strong>No total (corrida + ciclismo)</strong>: {cont} metros</p>
+        <p><strong>corridas ({run} atv)</strong>: {gainElevRun} metros</p>
+        <p><strong>ciclismo ({mountainBike} atv)</strong>: {gainElevBike} metros</p>
       </CardContent>
     </Card>
   );
