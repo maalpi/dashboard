@@ -30,11 +30,17 @@ export function Nota({ title, content, onDelete, id }: NoteProps) {
           {mouseIsOver && (
             <button
               onClick={() => onDelete(id)}
-              className="float-right ml-4 bg-transparent border-none hover:bg-transparent ease-in"
+              className="float-right hidden sm:block ml-4 bg-transparent border-none hover:bg-transparent ease-in"
             >
               <Trash2 size={17} className="text-red-500 hover:text-red-950 ease-in" />
             </button>
           )}
+          <button
+              onClick={() => onDelete(id)}
+              className="float-right ml-4 sm:hidden bg-transparent border-none hover:bg-transparent ease-in"
+            >
+              <Trash2 size={17} className="text-red-500 hover:text-red-950 ease-in" />
+            </button>
         </div>
         <CardDescription className="mt-2 break-words whitespace-pre-wrap">
           {content}
