@@ -99,7 +99,7 @@ export default function TaskCard({ task, deleteTask, updateTask }: Props) {
             {...listeners}
         >
             <CardContent className="p-2.5 h-[80px] min-h-[80px] items-center flex text-left rounded-xl hover:ring-2 hover:ring-inset
-                                  hover:ring-rose-500 cursor-grab relative task "
+                                  hover:ring-inherit cursor-grab relative task "
                 onMouseEnter={() => {
                     setMouseIsOver(true);
                 }}

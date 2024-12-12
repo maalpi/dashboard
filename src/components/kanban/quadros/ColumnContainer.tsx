@@ -43,20 +43,21 @@ function ColumnContainer(props: Props){
     }, [tasks])
 
     return (
-            <div className="min-w-[270px] h-[500px] xl:h-[500px] sm:w-[1000px] md:min-w-[250px] md:w-[250px] xl:w-[350px] max-h-[600px] rounded-md flex flex-col"
+            <div className="min-w-[270px] h-[500px] xl:h-[500px] sm:w-[1000px] md:min-w-[250px] md:w-[250px] xl:w-[350px] max-h-[600px] 
+                            rounded-md flex flex-col "
                 ref={setNodeRef} 
                 style={style} 
                 >
-                <div className="text-md h-[60px] bg-current rounded-md rounded-b-none p-3 font-bold border-4 border-current" 
+                <div className="text-md h-[60px] bg-current rounded-md rounded-b-none p-3 font-bold border-4 border-[#24242c] bg-[#24242c]" 
                 >
-                    <div className="flex justify-center py-1 text-sm">
+                    <div className="flex justify-center py-1 text-sm ">
 
-                        <h1 className="text-primary-foreground justify-center">{column.title}</h1>
+                        <h1 className="text-primary-foreground justify-center text-[#9fadbc]">{column.title}</h1>
                         
                     </div>
                 </div>
                 {/*TASKS*/}
-                <div className='flex flex-grow bg-current flex-col gap-4 p-2 overflow-auto'>
+                <div className='flex flex-grow bg-current flex-col gap-4 p-2 overflow-auto bg-[#24242c]'>
                     <SortableContext items={tasksIds}>
                     {
                     tasks.map( task => (
@@ -70,11 +71,11 @@ function ColumnContainer(props: Props){
                     </SortableContext>
                 </div>
                 {/*FOOTER*/}
-                <button className="flex gap-2 items-center justify-center border-2 p-3 bg-zinc-700 border-t-[0.1px] border-t-slate-300 border-transparent hover:text-rose-500 active:bg-black"
+                <button className="flex gap-2 items-center justify-center border-2 p-3 rounded-md rounded-t-none bg-[#24242c] border-t-[0.1px] border-none border-transparent hover:text-rose-500 hover:bg-[#24242c] hover:bg-opacity-70"
                         onClick={() => {createTask(column.id)}}
                 >
-                    <PlusCircleIcon/>
-                    add taskss
+                    <PlusCircleIcon className="text-white"/>
+                    <p className="text-white">add taskss</p>
                 </button>
         </div>
     )
