@@ -73,11 +73,20 @@ export default function Home() {
                   e.stopPropagation(); // Impede que o clique abra a página
                   handleDelete(table.id);
                 }}
-                className="float-right ml-4 bg-transparent border-none hover:bg-transparent ease-in"
+                className="float-right hidden sm:block ml-4 bg-transparent border-none hover:bg-transparent ease-in"
               >
                 <Trash2 size={17} className="text-red-500 hover:text-red-950 ease-in" />
               </button>
             )}
+           <button
+            onClick={(e) => {
+              e.stopPropagation(); // Impede que o clique abra a página
+              handleDelete(table.id);
+            }}
+            className="float-right ml-4 sm:hidden mt-2  bg-transparent border-none hover:bg-transparent ease-in"
+          >
+            <Trash2 size={17} className="text-red-500 hover:text-red-950 ease-in" />
+          </button>
             </div>
             <CardDescription className="mt-3">{table.imageUrl}</CardDescription> {/* Exibir a descrição ou a URL da imagem */}
           </Card>
