@@ -48,16 +48,16 @@ function ColumnContainer(props: Props){
                 ref={setNodeRef} 
                 style={style} 
                 >
-                <div className="text-md h-[60px] bg-current rounded-md rounded-b-none p-3 font-bold border-4 border-[#24242c] bg-[#24242c]" 
+                <div className="text-md h-[60px] bg-current rounded-md rounded-b-none p-3 font-bold border-[#30303b] bg-[#30303b]" 
                 >
                     <div className="flex justify-center py-1 text-sm ">
 
-                        <h1 className="text-primary-foreground justify-center text-[#9fadbc]">{column.title}</h1>
+                        <h1 className="text-primary-foreground justify-center text-[#ccd7e4]">{column.title}</h1>
                         
                     </div>
                 </div>
                 {/*TASKS*/}
-                <div className='flex flex-grow bg-current flex-col gap-4 p-2 overflow-auto bg-[#24242c]'>
+                <div className='flex flex-grow bg-current flex-col gap-4 p-2 overflow-auto bg-[#30303b]'>
                     <SortableContext items={tasksIds}>
                     {
                     tasks.map( task => (
@@ -71,11 +71,11 @@ function ColumnContainer(props: Props){
                     </SortableContext>
                 </div>
                 {/*FOOTER*/}
-                <button className="flex gap-2 items-center justify-center border-2 p-3 rounded-md rounded-t-none bg-[#24242c] border-t-[0.1px] border-none border-transparent hover:text-rose-500 hover:bg-[#24242c] hover:bg-opacity-70"
+                <button className="flex gap-2 items-center justify-center border-2 p-3 rounded-md rounded-t-none bg-[#30303b] border-t-[0.1px] border-none border-transparent hover:text-rose-500 hover:bg-[#24242c] hover:bg-opacity-70"
                         onClick={() => {createTask(column.id)}}
                 >
-                    <PlusCircleIcon className="text-white"/>
-                    <p className="text-white">add taskss</p>
+                    <PlusCircleIcon className="text-[#ccd7e4]"/>
+                    <p className="text-[#ccd7e4]">add taskss</p>
                 </button>
         </div>
     )
