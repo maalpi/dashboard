@@ -15,8 +15,6 @@ feito utilizando Google Firebase de back-end e o framework Next.js de front-end.
 ## Tecnologias
 - O projeto foi feito utilizando o Next na versão 14 e firebase de back-end e banco de dados. Foi utilizado o Tailwind e ShadCN para estilização, o Tanstack(antigo React Query) para consumo das APIS do Strava e Tomorrow.io. Foi feito utilizando Typescript.
 
-Mais informações, videos e mais coisas em breve...
-
 ## Tela inicial
 - Nessa tela, o usuário se deparará com:
   + to-do list diário (com itens apagados automaticamente ao mudar de dia)
