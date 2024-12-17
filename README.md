@@ -13,15 +13,7 @@ Criação de um dashboard de estudo com os seguintes recursos:
 feito utilizando Google Firebase de back-end e o framework Next.js de front-end.
 
 ## Tecnologias
-
-+ Next.14
-+ Typescript
-+ Firebase Firestore
-+ Tanstack
-+ Tomorrow.io
-+ API Strava
-+ ShadCN
-+ Tailwind
+- O projeto foi feito utilizando o Next na versão 14 e firebase de back-end e banco de dados. Foi utilizado o Tailwind e ShadCN para estilização, o Tanstack(antigo React Query) para consumo das APIS do Strava e Tomorrow.io. Foi feito utilizando Typescript.
 
 Mais informações, videos e mais coisas em breve...
 
@@ -50,7 +42,7 @@ https://github.com/user-attachments/assets/ca88493e-c67a-43a2-93f1-8b13be2dc1ee
 https://github.com/user-attachments/assets/35ae8709-4a89-4434-b342-2b7c07a46843
 
 ## Tela Atividades
-- Aqui, o usuário poderá gerenciar seus eventos futuros com um calendário sincronizado em tempo real via Firestore. Adicione ou remova eventos com facilidade e veja as atualizações refletidas instantaneamente.
+- Aqui, o usuário poderá ver informações sobre seus exercicios do ultimo mes que estão registrados no Strava. Tem informações como ganho de elevação, melhor atividade, distancia total percorrida, grafico de corridas do últimos 7 dias e mais.
 
 https://github.com/user-attachments/assets/f901eeaf-eefa-4100-819d-3ce2d9cb088d
 
